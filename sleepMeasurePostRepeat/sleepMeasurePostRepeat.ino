@@ -4,6 +4,7 @@
 #include "sensor.h"
 #include "vector"
 #include "memory"
+#include "AsyncDelay.h"
 
 //SHTxx
 #if defined(SHT35A) or defined(SHT35B) or defined(SHT85)
@@ -28,6 +29,10 @@ std::vector<std::unique_ptr<Sensor>> sensors;
 //JSON documents
 StaticJsonDocument<500> masterdoc;
 StaticJsonDocument<160> sensordoc;
+
+//******************************************
+//timing
+AsyncDelay sleepTime;
 
 //******************************************
 //setup
@@ -81,12 +86,16 @@ void setup() {
   }
   Serial.println();
 
-//------------------------------------------
-//print measurement names and units
+  //------------------------------------------
+  //print measurement names and units
   for (auto&& sensor : sensors) {
       Serial.print(sensor->getSensorString());
   }
   Serial.println();
+
+  //------------------------------------------
+  //timing
+  sleepTime.start(SLEEPTIME*1e3, AsyncDelay::MILLIS);
   
 } //setup()
 
@@ -94,32 +103,37 @@ void setup() {
 //loop
 void loop() {
 
-  //------------------------------------------
-  //read data
-  for (auto&& sensor : sensors) {
-    sensor->readData();
-  }
+  if (sleepTime.isExpired()) {
+
+    //------------------------------------------
+    //read data
+    for (auto&& sensor : sensors) {
+      sensor->readData();
+    }
+    
+    //------------------------------------------
+    //print measurements
+    for (auto&& sensor : sensors) {
+      Serial.print(sensor->getMeasurementsString());
+    }
+    Serial.println();
   
-  //------------------------------------------
-  //print measurements
-  for (auto&& sensor : sensors) {
-    Serial.print(sensor->getMeasurementsString());
-  }
-  Serial.println();
+    //------------------------------------------
+    //print JSON
+    /*
+    masterdoc.clear();
+    for (auto&& sensor : sensors) {
+      sensor->getJSONDoc(sensordoc);
+      masterdoc.add(sensordoc);
+    }
+    //serializeJsonPretty(masterdoc, Serial);
+    //Serial.println();
+    */
 
-  //------------------------------------------
-  //print JSON
-  /*
-  masterdoc.clear();
-  for (auto&& sensor : sensors) {
-    sensor->getJSONDoc(sensordoc);
-    masterdoc.add(sensordoc);
-  }
-  //serializeJsonPretty(masterdoc, Serial);
-  //Serial.println();
-  */
-  //------------------------------------------
-  //delay
-  delay(2000);//ms
-
+    //------------------------------------------
+    //restart delay from when it exired
+    sleepTime.repeat();
+    
+  } //sleep time expired
+  
 } //loop()

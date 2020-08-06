@@ -1,7 +1,7 @@
 //******************************************
 //setup
 //#define CAFFEINE //do not go to sleep
-//#define SLEEPTIME (5)//s
+#define SLEEPTIME (5)//s
 //#define PRINTSERIAL //print measurements to serial output
 //#define POST //connect and post measurements
 //#define VERBOSE //print connection status and posting details
