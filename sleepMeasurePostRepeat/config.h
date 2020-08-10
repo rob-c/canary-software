@@ -3,9 +3,14 @@
 //#define CAFFEINE //do not go to sleep
 #define SLEEPTIME (5)//s
 //#define PRINTSERIAL //print measurements to serial output
-//#define POST //connect and post measurements
-//#define VERBOSE //print connection status and posting details
+#define POST //connect and post measurements
+#define VERBOSE //print connection status and posting details
 //#define ESP8266 //use an ESP8266 board instead of an ESP32 board (default)
+
+//******************************************
+//wifi
+#define WIFISSID ("ssid")
+#define WIFIPASSWORD ("password")
 
 //******************************************
 //SHT temperature and humidity sensors

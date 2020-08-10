@@ -25,7 +25,7 @@ int SPS30Sensor::init(void) {
 #ifdef VERBOSE
   if (_sps30available) {
     _ret = sps30_get_serial(_serial);
-    if (ret) {
+    if (_ret) {
       Serial.println("could not retrieve SPS30 serial number");
     } else {
       Serial.print("SPS30 serial number: ");
@@ -80,7 +80,7 @@ void SPS30Sensor::readData(void) {
     if (_ret < 0) {
 #ifdef VERBOSE
       Serial.print("SPS30 error reading data-ready flag: ");
-      Serial.println(ret);
+      Serial.println(_ret);
 #endif //VERBOSE
     } else if (!_data_ready) {
 #ifdef VERBOSE

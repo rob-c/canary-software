@@ -6,6 +6,16 @@
 #include "memory"
 #include "AsyncDelay.h"
 
+//wifi
+#ifdef POST
+#include "WiFiHandler.h"
+#ifdef ESP32
+#include "WiFi.h" //ESP32
+#else
+#include "ESP8266WiFi.h" //ESP8266
+#endif //ESP32
+#endif //POST
+
 //SHTxx
 #if defined(SHT35A) or defined(SHT35B) or defined(SHT85)
 #include "SHTxxSensor.h"
@@ -47,6 +57,12 @@ void setup() {
   Serial.begin(115200);
   while (!Serial) {}
   Serial.println();
+
+  //------------------------------------------
+  //connect to wifi
+  if (WiFi.status() != WL_CONNECTED) {
+    wifiConnect();
+  }
 
   //------------------------------------------
   //add sensors to the vector
