@@ -21,6 +21,11 @@
 #include "SPS30Sensor.h"
 #endif //SPS30
 
+//ADS1x15
+#if defined(ADS1115) or defined(ADS1015)
+#include "ADS1x15Sensor.h"
+#endif //ADS1015 or ADS1115
+
 //******************************************
 //create a vector of sensors
 std::vector<std::unique_ptr<Sensor>> sensors;
@@ -44,7 +49,7 @@ void setup() {
   Serial.println();
 
   //------------------------------------------
-  //declare sensors and add them to the vector
+  //add sensors to the vector
 
   //SHT35A
 #ifdef SHT35A
@@ -70,6 +75,11 @@ void setup() {
 #ifdef SPS30
   sensors.emplace_back(new SPS30Sensor());
 #endif //SPS30
+
+  //ADS1015 or ADS1115
+#if defined(ADS1115) or defined(ADS1015)
+  sensors.emplace_back(new ADS1x15Sensor(ADS1x15VDD, ADS1x15VREF));
+#endif //ADS1015 or ADS1115
     
   //------------------------------------------
   //initialize sensors
@@ -131,7 +141,7 @@ void loop() {
     */
 
     //------------------------------------------
-    //restart delay from when it exired
+    //restart delay from when it expired
     sleepTime.repeat();
     
   } //sleep time expired

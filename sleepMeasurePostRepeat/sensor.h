@@ -1,6 +1,7 @@
 #ifndef SENSOR
 #define SENSOR
 
+#include "config.h"
 #include "limits.h"
 #include "ArduinoJson.h"
 

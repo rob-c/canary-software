@@ -29,3 +29,43 @@
 //SPS30 dust particle counter
 //#define SPS30
 //#define SPS30AVERAGE //instead of sleeping, average over multiple SPS30 measurements
+
+//******************************************
+//ADS1x15 ADCs and NTCs
+//#define ADS1015 //ADS1015 (12 bit)
+#define ADS1115 //ADS1115 (16 bit)
+#define ADS1x15VDD (3.3)//[V]
+#define ADS1x15VREF (4.096)//[V] //NOTE valid for ADC gain set to 1 //see ADS1x15GAIN
+#define ADS1x15GAIN (GAIN_ONE) //1x gain  +/- 4.096V  1 bit = 2mV (ADS1015) or 0.125mV (ADS1115) //see ADS1x15VREF
+
+//ADC0/NTC0
+#define ADS1x150ADC //NOTE: set also the voltage divider resistor value
+#define ADS1x150NTC //NOTE: set also the voltage divider resistor value and NTC R0, T0 and B values
+#define ADS1x150RDIV (50e3) //ADC voltage divider resistor value [Ohm] //50e3
+#define ADS1x150R0 (1e4) //NTC R0 [Ohm] //1e4
+#define ADS1x150T0 (298.15) //NTC T0 [K] //298.15
+#define ADS1x150B (3435) //NTC B //3435
+
+//ADC1/NTC1
+#define ADS1x151ADC //NOTE: set also the voltage divider resistor value
+#define ADS1x151NTC //NOTE: set also the voltage divider resistor value and NTC R0, T0 and B values
+#define ADS1x151RDIV (50e3) //ADC voltage divider resistor value [Ohm] //50e3
+#define ADS1x151R0 (1e4) //NTC R0 [Ohm] //1e4
+#define ADS1x151T0 (298.15) //NTC T0 [K] //298.15
+#define ADS1x151B (3435) //NTC B //3435
+
+//ADC2/NTC2
+#define ADS1x152ADC //NOTE: set also the voltage divider resistor value
+#define ADS1x152NTC //NOTE: set also the voltage divider resistor value and NTC R0, T0 and B values
+#define ADS1x152RDIV (50e3) //ADC voltage divider resistor value [Ohm] //50e3
+#define ADS1x152R0 (1e4) //NTC R0 [Ohm] //1e4
+#define ADS1x152T0 (298.15) //NTC T0 [K] //298.15
+#define ADS1x152B (3435) //NTC B //3435
+
+//ADC3/NTC3
+#define ADS1x153ADC //NOTE: set also the voltage divider resistor value
+#define ADS1x153NTC //NOTE: set also the voltage divider resistor value and NTC R0, T0 and B values
+#define ADS1x153RDIV (50e3) //ADC voltage divider resistor value [Ohm] //50e3
+#define ADS1x153R0 (22e3) //NTC R0 [Ohm] //1e4/22e3/4.7e3
+#define ADS1x153T0 (298.15) //NTC T0 [K] //298.15
+#define ADS1x153B (4000) //NTC B //3435/4000/3650

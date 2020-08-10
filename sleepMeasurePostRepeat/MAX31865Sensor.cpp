@@ -9,6 +9,7 @@ MAX31865Sensor::MAX31865Sensor(float rnom, float rref, uint8_t cs):
   _rnom = rnom;
   _rref = rref;
   _cs = cs;
+  return;
 }
   
 //******************************************
@@ -58,6 +59,8 @@ void MAX31865Sensor::readData() {
     computeDewPoint();
   }
   */
+
+  return;
 }
 
 //******************************************
