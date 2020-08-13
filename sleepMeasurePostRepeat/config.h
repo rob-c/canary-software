@@ -1,21 +1,35 @@
 //******************************************
 //setup
-//#define CAFFEINE //do not go to sleep
+#define CAFFEINE //do not go to sleep
 #define SLEEPTIME (5)//s
 //#define PRINTSERIAL //print measurements to serial output
-#define POST //connect and post measurements
+//#define POST //connect and post measurements
 #define VERBOSE //print connection status and posting details
 //#define ESP8266 //use an ESP8266 board instead of an ESP32 board (default)
 
 //******************************************
 //wifi
-#define WIFISSID ("ssid")
-#define WIFIPASSWORD ("password")
+//#define WIFISSID ("ssid")
+//#define WIFIPASSWORD ("password")
+
+//******************************************
+//MQTT
+#define MQTTMESSAGESIZE (1024)
+//#define MQTTSERVER ("127.0.0.1")
+//#define MQTTSPORT (1883)
+//#define MQTTUSERNAME ("username")
+//#define MQTTPASSWORD ("password")
+//#define MQTTTOPIC ("topic") //MQTT topic
+//#define INSTITUTE ("institute") //institute of the measurement device //NOTE this is used also for the MQTT topic
+//#define ROOM ("room") //room of the measurement device
+//#define LOCATION ("location") //location of the measurement device
+//#define NAME ("name") //name of the measurement device
+#define MQTTTIME (30) //[s] //MQTT broker check-in time interval
 
 //******************************************
 //SHT temperature and humidity sensors
-//#define SHT35A //SHT35A (0x44 address)
-#define SHT35B //SHT35B (0x45 address)
+#define SHT35A //SHT35A (0x44 address)
+//#define SHT35B //SHT35B (0x45 address)
 //#define SHT85 //SHT85 (0x44 address)
 
 //******************************************
@@ -38,38 +52,38 @@
 //******************************************
 //ADS1x15 ADCs and NTCs
 //#define ADS1015 //ADS1015 (12 bit)
-#define ADS1115 //ADS1115 (16 bit)
+//#define ADS1115 //ADS1115 (16 bit)
 #define ADS1x15VDD (3.3)//[V]
 #define ADS1x15VREF (4.096)//[V] //NOTE valid for ADC gain set to 1 //see ADS1x15GAIN
 #define ADS1x15GAIN (GAIN_ONE) //1x gain  +/- 4.096V  1 bit = 2mV (ADS1015) or 0.125mV (ADS1115) //see ADS1x15VREF
 
 //ADC0/NTC0
-#define ADS1x150ADC //NOTE: set also the voltage divider resistor value
-#define ADS1x150NTC //NOTE: set also the voltage divider resistor value and NTC R0, T0 and B values
+//#define ADS1x150ADC //NOTE: set also the voltage divider resistor value
+//#define ADS1x150NTC //NOTE: set also the voltage divider resistor value and NTC R0, T0 and B values
 #define ADS1x150RDIV (50e3) //ADC voltage divider resistor value [Ohm] //50e3
 #define ADS1x150R0 (1e4) //NTC R0 [Ohm] //1e4
 #define ADS1x150T0 (298.15) //NTC T0 [K] //298.15
 #define ADS1x150B (3435) //NTC B //3435
 
 //ADC1/NTC1
-#define ADS1x151ADC //NOTE: set also the voltage divider resistor value
-#define ADS1x151NTC //NOTE: set also the voltage divider resistor value and NTC R0, T0 and B values
+//#define ADS1x151ADC //NOTE: set also the voltage divider resistor value
+//#define ADS1x151NTC //NOTE: set also the voltage divider resistor value and NTC R0, T0 and B values
 #define ADS1x151RDIV (50e3) //ADC voltage divider resistor value [Ohm] //50e3
 #define ADS1x151R0 (1e4) //NTC R0 [Ohm] //1e4
 #define ADS1x151T0 (298.15) //NTC T0 [K] //298.15
 #define ADS1x151B (3435) //NTC B //3435
 
 //ADC2/NTC2
-#define ADS1x152ADC //NOTE: set also the voltage divider resistor value
-#define ADS1x152NTC //NOTE: set also the voltage divider resistor value and NTC R0, T0 and B values
+//#define ADS1x152ADC //NOTE: set also the voltage divider resistor value
+//#define ADS1x152NTC //NOTE: set also the voltage divider resistor value and NTC R0, T0 and B values
 #define ADS1x152RDIV (50e3) //ADC voltage divider resistor value [Ohm] //50e3
 #define ADS1x152R0 (1e4) //NTC R0 [Ohm] //1e4
 #define ADS1x152T0 (298.15) //NTC T0 [K] //298.15
 #define ADS1x152B (3435) //NTC B //3435
 
 //ADC3/NTC3
-#define ADS1x153ADC //NOTE: set also the voltage divider resistor value
-#define ADS1x153NTC //NOTE: set also the voltage divider resistor value and NTC R0, T0 and B values
+//#define ADS1x153ADC //NOTE: set also the voltage divider resistor value
+//#define ADS1x153NTC //NOTE: set also the voltage divider resistor value and NTC R0, T0 and B values
 #define ADS1x153RDIV (50e3) //ADC voltage divider resistor value [Ohm] //50e3
 #define ADS1x153R0 (22e3) //NTC R0 [Ohm] //1e4/22e3/4.7e3
 #define ADS1x153T0 (298.15) //NTC T0 [K] //298.15

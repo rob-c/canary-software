@@ -17,6 +17,15 @@ const char* password = WIFIPASSWORD;
 //connect
 void wifiConnect() {
 
+  //check if already conncted to wifi
+  if (WiFi.status() == WL_CONNECTED) {
+#ifdef VERBOSE
+    Serial.print("already connected to wifi ");
+    Serial.println(ssid);
+#endif //VERBOSE
+    return;
+  }
+
   //https://github.com/esp8266/Arduino/issues/2702
   WiFi.disconnect();
   WiFi.begin(ssid, password);

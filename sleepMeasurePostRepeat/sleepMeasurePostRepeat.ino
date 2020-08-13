@@ -6,15 +6,17 @@
 #include "memory"
 #include "AsyncDelay.h"
 
-//wifi
-#ifdef POST
+//wifi and MQTT
+#if defined(POST) or defined(VERBOSE)
 #include "WiFiHandler.h"
+#include "MQTTHandler.h"
+#include "PubSubClient.h"
 #ifdef ESP32
 #include "WiFi.h" //ESP32
 #else
 #include "ESP8266WiFi.h" //ESP8266
 #endif //ESP32
-#endif //POST
+#endif //POST or VERBOSE
 
 //SHTxx
 #if defined(SHT35A) or defined(SHT35B) or defined(SHT85)
@@ -37,17 +39,30 @@
 #endif //ADS1015 or ADS1115
 
 //******************************************
+//MQTT
+#if defined(POST) or defined(VERBOSE)
+WiFiClient wificlient;
+PubSubClient mqttclient(wificlient);
+const char* mqttserver = MQTTSERVER;
+long mqttport = MQTTPORT;
+const char* mqttusername = MQTTUSERNAME;
+const char* mqttpassword = MQTTPASSWORD;
+String topicString = MQTTTOPIC;
+#endif //POST or VERBOSE
+
+//******************************************
 //create a vector of sensors
 std::vector<std::unique_ptr<Sensor>> sensors;
 
 //******************************************
 //JSON documents
-StaticJsonDocument<500> masterdoc;
+StaticJsonDocument<MQTTMESSAGESIZE> masterdoc;
 StaticJsonDocument<160> sensordoc;
 
 //******************************************
-//timing
-AsyncDelay sleepTime;
+//loop time intervals
+AsyncDelay sleepTime; //data measurement and posting
+AsyncDelay MQTTTime; //MQTT broker check-in
 
 //******************************************
 //setup
@@ -59,10 +74,16 @@ void setup() {
   Serial.println();
 
   //------------------------------------------
-  //connect to wifi
-  if (WiFi.status() != WL_CONNECTED) {
-    wifiConnect();
-  }
+  //MQTT setup
+#ifdef POST
+  wifiConnect();
+  mqttclient.setServer(mqttserver, mqttport);
+  mqttclient.setBufferSize(MQTTMESSAGESIZE);
+#endif //POST
+#ifdef INSTITUTE
+  topicString += "/";
+  topicString += INSTITUTE;
+#endif //INSTITUTE
 
   //------------------------------------------
   //add sensors to the vector
@@ -122,6 +143,7 @@ void setup() {
   //------------------------------------------
   //timing
   sleepTime.start(SLEEPTIME*1e3, AsyncDelay::MILLIS);
+  MQTTTime.start(MQTTTIME*1e3, AsyncDelay::MILLIS);
   
 } //setup()
 
@@ -129,6 +151,8 @@ void setup() {
 //loop
 void loop() {
 
+  //------------------------------------------
+  //data measurement and posting
   if (sleepTime.isExpired()) {
 
     //------------------------------------------
@@ -145,8 +169,7 @@ void loop() {
     Serial.println();
   
     //------------------------------------------
-    //print JSON
-    /*
+    //measurements JSON
     masterdoc.clear();
     for (auto&& sensor : sensors) {
       sensor->getJSONDoc(sensordoc);
@@ -154,12 +177,25 @@ void loop() {
     }
     //serializeJsonPretty(masterdoc, Serial);
     //Serial.println();
-    */
+
+    //------------------------------------------
+    //post values
+#if defined(POST) or defined(VERBOSE)
+    postValues(mqttclient, mqttserver, mqttport, mqttusername, mqttpassword, masterdoc, topicString);
+#endif //POST or VERBOSE
 
     //------------------------------------------
     //restart delay from when it expired
     sleepTime.repeat();
-    
-  } //sleep time expired
-  
+  } //data measurement and posting
+
+  //------------------------------------------
+  //MQTT check-in loop
+#ifdef POST
+  if (MQTTTime.isExpired()) {
+    mqttclient.loop();
+    sleepTime.repeat();
+  } //MQTT check-in loop
+#endif //POST
+
 } //loop()
