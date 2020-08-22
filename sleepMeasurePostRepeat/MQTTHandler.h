@@ -136,8 +136,8 @@ void postValues(PubSubClient &mqttclient, const char* mqttserver, uint16_t mqttp
   Serial.println("JSON: ");
   serializeJsonPretty(doc, Serial);
   Serial.println();
-  //Serial.print("message: ");
-  //Serial.println(message);
+  Serial.print("message: ");
+  Serial.println(message);
   Serial.print("message length: ");
   Serial.println(measureJson(doc));
   Serial.print("topic: ");

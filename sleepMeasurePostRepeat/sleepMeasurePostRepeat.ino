@@ -71,7 +71,7 @@ void setup() {
   //------------------------------------------
   Serial.begin(115200);
   while (!Serial) {}
-  Serial.println();
+  Serial.println("\nCanary firmware v. 0.0\n");
 
   //------------------------------------------
   //MQTT setup
@@ -135,11 +135,13 @@ void setup() {
 
   //------------------------------------------
   //print measurement names and units
+#ifdef PRINTSERIAL
   for (auto&& sensor : sensors) {
       Serial.print(sensor->getSensorString());
   }
   Serial.println();
-
+#endif //PRINTSERIAL
+  
   //------------------------------------------
   //timing
   sleepTime.start(SLEEPTIME*1e3, AsyncDelay::MILLIS);
@@ -163,11 +165,13 @@ void loop() {
     
     //------------------------------------------
     //print measurements
+#ifdef PRINTSERIAL
     for (auto&& sensor : sensors) {
       Serial.print(sensor->getMeasurementsString());
     }
     Serial.println();
-  
+#endif //PRINTSERIAL
+    
     //------------------------------------------
     //measurements JSON
     masterdoc.clear();
