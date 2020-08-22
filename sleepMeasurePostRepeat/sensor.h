@@ -11,6 +11,7 @@ class Sensor {
     Sensor(){};
     virtual int init(void) {return 0;}
     virtual void readData(void) {return;}
+    virtual void integrate(void) {return;}
     virtual String getSensorString(void) {return "";}
     virtual String getMeasurementsString(void) {return "";}
     virtual void getJSONDoc(JsonDocument &doc) {return;}

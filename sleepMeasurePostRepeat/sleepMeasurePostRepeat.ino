@@ -62,6 +62,7 @@ StaticJsonDocument<160> sensordoc;
 //******************************************
 //loop time intervals
 AsyncDelay sleepTime; //data measurement and posting
+AsyncDelay integrationTime; //measurement average
 AsyncDelay MQTTTime; //MQTT broker check-in
 
 //******************************************
@@ -110,7 +111,7 @@ void setup() {
 
   //SPS30
 #ifdef SPS30
-  sensors.emplace_back(new SPS30Sensor());
+  sensors.emplace_back(new SPS30Sensor(SPS30AVERAGE));
 #endif //SPS30
 
   //ADS1015 or ADS1115
@@ -145,6 +146,7 @@ void setup() {
   //------------------------------------------
   //timing
   sleepTime.start(SLEEPTIME*1e3, AsyncDelay::MILLIS);
+  integrationTime.start(INTEGRATIONTIME*1e3, AsyncDelay::MILLIS);
   MQTTTime.start(MQTTTIME*1e3, AsyncDelay::MILLIS);
   
 } //setup()
@@ -152,6 +154,17 @@ void setup() {
 //******************************************
 //loop
 void loop() {
+
+  //------------------------------------------
+  ////integrate sensor measurements (if integration is enabled)
+  if (integrationTime.isExpired()) {
+
+    for (auto&& sensor : sensors) {
+      sensor->integrate();
+    }
+    
+    integrationTime.repeat();
+  } //integration loop
 
   //------------------------------------------
   //data measurement and posting
@@ -179,8 +192,6 @@ void loop() {
       sensor->getJSONDoc(sensordoc);
       masterdoc.add(sensordoc);
     }
-    //serializeJsonPretty(masterdoc, Serial);
-    //Serial.println();
 
     //------------------------------------------
     //post values

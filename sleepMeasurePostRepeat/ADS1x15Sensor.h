@@ -22,13 +22,13 @@ class ADS1x15Sensor: public virtual Sensor {
   private:    
 #if defined(ADS1015)
     Adafruit_ADS1015 _ads1x15; //ADS1015 (12 bit)
-    uint8_t nbits = 11;//NOTE n-1 ADC bits since one bit is for the sign //CHECK
+    uint8_t nbits = 11;//NOTE n-1 ADC bits since one bit is for the sign
 #elif defined(ADS1115)
     Adafruit_ADS1115 _ads1x15; //ADS1115 (16 bit)
-    uint8_t nbits = 15;//NOTE n-1 ADC bits since one bit is for the sign //CHECK
+    uint8_t nbits = 15;//NOTE n-1 ADC bits since one bit is for the sign
 #else //ADS1115 as default
     Adafruit_ADS1115 _ads1x15; //ADS1115 (16 bit)
-    uint8_t nbits = 15;//NOTE n-1 ADC bits since one bit is for the sign //CHECK
+    uint8_t nbits = 15;//NOTE n-1 ADC bits since one bit is for the sign
 #endif //ADS1015 or ADS1115
 
     float _vdd = std::numeric_limits<float>::quiet_NaN();//VDD [V]

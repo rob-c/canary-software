@@ -7,9 +7,11 @@
 class SPS30Sensor: public virtual Sensor {
   
   public:
-    SPS30Sensor(void) {_name = "SPS30";}
+    SPS30Sensor(bool average);
     int init(void) override;
+    float simplyRead(void);
     void readData(void) override;
+    void integrate(void) override;
     float getDustConcentration(void) {return _dustnc;}
     String getSensorString(void) override {return "dust[cm^-3] ";}
     String getMeasurementsString(void) override;
@@ -24,5 +26,8 @@ class SPS30Sensor: public virtual Sensor {
     char _serial[SPS30_MAX_SERIAL_LEN];
     struct sps30_measurement _m;
     uint16_t _data_ready;
+    bool _average = false;
+    float _integral = 0;
+    uint32_t _counter = 0;
 };
 #endif //SPS30SENSOR

@@ -1,6 +1,16 @@
 #include "SPS30Sensor.h"
 
 //******************************************
+//SPS30 constructor
+SPS30Sensor::SPS30Sensor(bool average) {
+  _name = "SPS30";
+  _average = average;
+  _integral = 0;
+  _counter = 0;
+  return;
+}
+
+//******************************************
 //initialize SPS30 sensor
 int SPS30Sensor::init(void) {
 
@@ -69,10 +79,10 @@ int SPS30Sensor::init(void) {
 }
 
 //******************************************
-//read data from the sensor
-void SPS30Sensor::readData(void) {
+//simply read data from the sensor
+float SPS30Sensor::simplyRead(void) {
   
-  if (!_sps30available) return;
+  if (!_sps30available) return std::numeric_limits<float>::quiet_NaN();
 
   //try to read data from SPS30
   for (int ii = 0; ii < 10; ii++) {
@@ -99,9 +109,43 @@ void SPS30Sensor::readData(void) {
 #ifdef VERBOSE
     Serial.println("SPS30 error reading measurement");
 #endif //VERBOSE
+    return std::numeric_limits<float>::quiet_NaN();
   } else {
-    if (isnan(_dustnc)) _dustnc = 0.; //initialize to 0 if NaN
-    _dustnc = (_m.nc_10p0 - _m.nc_0p5); //particles/cm^3
+    return (_m.nc_10p0 - _m.nc_0p5); //particles/cm^3
+  }
+}
+
+//******************************************
+//integrate measurements to get an average measurement
+void SPS30Sensor::integrate(void) {
+  if (_average) {
+    float value = simplyRead();
+    if (!isnan(value)) {
+      _integral += value;
+      _counter++;
+      /*
+      Serial.print("value: ");
+      Serial.print(value);
+      Serial.print("\tintegral: ");
+      Serial.print(_integral);
+      Serial.print("\tcounter = ");
+      Serial.print(_counter);
+      Serial.println();
+      */
+    }
+  }
+  return;
+}
+
+//******************************************
+//read data from the sensor
+void SPS30Sensor::readData(void) {
+  if (_average) {
+    _dustnc = _integral / _counter;
+    _integral = 0;
+    _counter = 0;
+  } else {
+    _dustnc = simplyRead();
   }
 }
 

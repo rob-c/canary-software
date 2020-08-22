@@ -1,9 +1,8 @@
-#include "guescio.h" //TEST
-
 //******************************************
 //setup
 #define CAFFEINE //do not go to sleep
-#define SLEEPTIME (5)//s
+#define SLEEPTIME (5) //[s]
+#define INTEGRATIONTIME (1) //integration time interval [s]
 #define PRINTSERIAL //print measurements to serial output
 //#define POST //connect and post measurements
 //#define VERBOSE //print connection status and posting details
@@ -48,8 +47,8 @@
 
 //******************************************
 //SPS30 dust particle counter
-//#define SPS30
-//#define SPS30AVERAGE //instead of sleeping, average over multiple SPS30 measurements
+#define SPS30
+#define SPS30AVERAGE (true)//average over multiple SPS30 measurements
 
 //******************************************
 //ADS1x15 ADCs and NTCs
