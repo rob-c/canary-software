@@ -144,6 +144,8 @@ void postValues(PubSubClient &mqttclient, const char* mqttserver, uint16_t mqttp
   Serial.println(topic);
   Serial.print("server: ");
   Serial.println(mqttserver);
+  Serial.print("port: ");
+  Serial.println(mqttport);
   Serial.print("user: ");
   Serial.println(mqttusername);
   Serial.print("auth: ");

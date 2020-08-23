@@ -142,12 +142,26 @@ void setup() {
   }
   Serial.println();
 #endif //PRINTSERIAL
+
+  //------------------------------------------
+  //read, print and post values before going to sleep
+  //NOTE this is meant for battery operation (no caffeine)
+#ifndef CAFFEINE
+  for (auto&& sensor : sensors) {
+    sensor->integrate();
+  }
+  readPrintPost();
+  Serial.println("now going to sleep zzz...");
+  ESP.deepSleep(SLEEPTIME * 1e6); //µs
+#endif //CAFFEINE
   
   //------------------------------------------
   //timing
+#ifdef CAFFEINE
   sleepTime.start(SLEEPTIME*1e3, AsyncDelay::MILLIS);
   integrationTime.start(INTEGRATIONTIME*1e3, AsyncDelay::MILLIS);
   MQTTTime.start(MQTTTIME*1e3, AsyncDelay::MILLIS);
+#endif //CAFFEINE
   
 } //setup()
 
@@ -156,22 +170,39 @@ void setup() {
 void loop() {
 
   //------------------------------------------
-  ////integrate sensor measurements (if integration is enabled)
+  ////integrate sensor measurements (if averaging is enabled)
   if (integrationTime.isExpired()) {
-
     for (auto&& sensor : sensors) {
       sensor->integrate();
     }
-    
     integrationTime.repeat();
-  } //integration loop
+  }
 
   //------------------------------------------
-  //data measurement and posting
+  //read, print and post measurements
   if (sleepTime.isExpired()) {
+    readPrintPost();
+    sleepTime.repeat();
+  }
+
+  //------------------------------------------
+  //MQTT check-in loop
+#ifdef POST
+  if (MQTTTime.isExpired()) {
+    mqttclient.loop();
+    MQTTTime.repeat();
+  }
+#endif //POST
+
+} //loop()
+
+//******************************************
+//read, print and post measurements
+//NOTE integration and averaging is done separately
+void readPrintPost() {
 
     //------------------------------------------
-    //read data
+    //read measurements
     for (auto&& sensor : sensors) {
       sensor->readData();
     }
@@ -186,31 +217,13 @@ void loop() {
 #endif //PRINTSERIAL
     
     //------------------------------------------
-    //measurements JSON
+    //post measurements
     masterdoc.clear();
     for (auto&& sensor : sensors) {
       sensor->getJSONDoc(sensordoc);
       masterdoc.add(sensordoc);
     }
-
-    //------------------------------------------
-    //post values
 #if defined(POST) or defined(VERBOSE)
     postValues(mqttclient, mqttserver, mqttport, mqttusername, mqttpassword, masterdoc, topicString);
 #endif //POST or VERBOSE
-
-    //------------------------------------------
-    //restart delay from when it expired
-    sleepTime.repeat();
-  } //data measurement and posting
-
-  //------------------------------------------
-  //MQTT check-in loop
-#ifdef POST
-  if (MQTTTime.isExpired()) {
-    mqttclient.loop();
-    sleepTime.repeat();
-  } //MQTT check-in loop
-#endif //POST
-
-} //loop()
+}
