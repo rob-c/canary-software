@@ -2,13 +2,14 @@
 
 //******************************************
 //MAX31865 constructor
-MAX31865Sensor::MAX31865Sensor(float rnom, float rref, uint8_t cs):
+MAX31865Sensor::MAX31865Sensor(float rnom, float rref, uint8_t cs, TRHSensor* rhsource):
   _max31865(Adafruit_MAX31865(cs))
   {
   _name = "MAX31865";
   _rnom = rnom;
   _rref = rref;
   _cs = cs;
+  _rhsource = rhsource;
   return;
 }
   
@@ -52,25 +53,21 @@ void MAX31865Sensor::readData() {
     _max31865.clearFault();
   }
 
-  /*
   //get RH measurement from another sensor
   if (_rhsource) {
     _rh = _rhsource->getRH();
     computeDewPoint();
   }
-  */
 
   return;
 }
 
 //******************************************
 //get label string for measurement values
-/*
 String MAX31865Sensor::getSensorString() {
-  if (_rhsource) return "t[C]   RH[%]  DP[C]  "; //TEST
-  else return "t[C]  ";
+  if (_rhsource) return "t[C]   RH[%]  DP[C]  ";
+  else return "t[C]   ";
 }
-*/
 
 //******************************************
 //get string with measurement values
@@ -78,14 +75,12 @@ String MAX31865Sensor::getMeasurementsString(void) {
   String s;
   s += String(_temp); //temperature
   s += ("  ");
-  /*
   if (_rhsource) {
     s += String(_rh); //humidity
     s += ("  ");
     s += String(_dp); //dew point
     s += ("  ");
   }
-  */
   return s;
 }
 
@@ -100,7 +95,6 @@ void MAX31865Sensor::getJSONDoc(JsonDocument &doc) {
   if ( ! isnan(_temp)) doc["temp"] = _temp;
   else doc["temp"] = "\"NaN\"";
 
-  /*
   if (_rhsource) {
     
     //relative humidity
@@ -118,7 +112,6 @@ void MAX31865Sensor::getJSONDoc(JsonDocument &doc) {
     }
     
   }
-  */
 
   //sensor name
   doc["sensor"] = _name;
