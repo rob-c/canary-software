@@ -1,11 +1,19 @@
+/*
+ * SPS30 sensor class.
+ * This inheriths from the generic sensor class.
+ */
+
 #ifndef SPS30SENSOR
 #define SPS30SENSOR
 
+//******************************************
 #include "sensor.h"
 #include "sps30.h"
 
+//******************************************
 class SPS30Sensor: public virtual Sensor {
-  
+
+  //------------------------------------------
   public:
     SPS30Sensor(bool average);
     int init(void) override;
@@ -16,9 +24,10 @@ class SPS30Sensor: public virtual Sensor {
     String getSensorString(void) override {return "dust[cm^-3] ";}
     String getMeasurementsString(void) override;
     void getJSONDoc(JsonDocument &doc) override;
-    
+
+  //------------------------------------------
   private:
-    float _dustnc; //dust concentration (0.5-10 µm) [cm^_3]
+    float _dustnc; //dust concentration (0.5-10 µm) [cm^-3]
     int16_t _ret;
     uint8_t _auto_clean_days = 2;
     uint32_t _auto_clean;

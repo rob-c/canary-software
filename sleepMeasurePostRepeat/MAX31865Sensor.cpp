@@ -23,10 +23,12 @@ int MAX31865Sensor::init(void) {
 //******************************************
 //read data from the sensor
 void MAX31865Sensor::readData() {
-  
+
+  //------------------------------------------
   //read temperature measurement
   _temp = _max31865.temperature(_rnom, _rref);
-  
+
+  //------------------------------------------
   //check and print any faults
   uint8_t fault = _max31865.readFault();
   if (fault) {
@@ -53,6 +55,7 @@ void MAX31865Sensor::readData() {
     _max31865.clearFault();
   }
 
+  //------------------------------------------
   //get RH measurement from another sensor
   if (_rhsource) {
     _rh = _rhsource->getRH();
@@ -88,19 +91,25 @@ String MAX31865Sensor::getMeasurementsString(void) {
 //get JSON doc with measurement values
 void MAX31865Sensor::getJSONDoc(JsonDocument &doc) {
 
+  //------------------------------------------
   //clear
   doc.clear();
 
+  //------------------------------------------
   //temperature
   if ( ! isnan(_temp)) doc["temp"] = _temp;
   else doc["temp"] = "\"NaN\"";
 
+  //------------------------------------------
+  //RH source
   if (_rhsource) {
-    
+
+    //------------------------------------------
     //relative humidity
     if ( ! isnan(_rh)) doc["rh"] = _rh;
     else doc["rh"] = "\"NaN\"";
-  
+
+    //------------------------------------------
     //dew point
     if ( ! isnan(_dp)) {
       doc["dewpoint"] = _dp;
@@ -113,6 +122,7 @@ void MAX31865Sensor::getJSONDoc(JsonDocument &doc) {
     
   }
 
+  //------------------------------------------
   //sensor name
   doc["sensor"] = _name;
   

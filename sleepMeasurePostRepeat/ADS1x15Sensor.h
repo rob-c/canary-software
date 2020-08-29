@@ -1,13 +1,21 @@
+/*
+ * ADS1x15 sensor class.
+ * This inheriths from the generic sensor class.
+ */
+ 
 #ifndef ADS1X15SENSOR
 #define ADS1X15SENSOR
 
+//******************************************
 #include "Sensor.h"
 #include "Wire.h"
 #include "Adafruit_ADS1015.h"
 #include "vector"
 
+//******************************************
 class ADS1x15Sensor: public virtual Sensor {
-  
+
+  //------------------------------------------
   public:
     ADS1x15Sensor(float vdd, float vref);
     int init(void) override;
@@ -19,6 +27,7 @@ class ADS1x15Sensor: public virtual Sensor {
     float getTNTC(uint8_t channel);
     void setADCChannel(uint8_t channel, float rdiv, float t0, float b, float r0);
 
+  //------------------------------------------
   private:    
 #if defined(ADS1015)
     Adafruit_ADS1015 _ads1x15; //ADS1015 (12 bit)

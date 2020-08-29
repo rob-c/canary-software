@@ -47,9 +47,8 @@ void ADS1x15Sensor::setADCChannel(uint8_t channel, float rdiv, float t0, float b
 //initialize ADS1x15 sensor
 int ADS1x15Sensor::init(void) {
 
-  //------------------------------------------
   //https://github.com/adafruit/Adafruit_ADS1X15/blob/master/examples/singleended/singleended.ino
-  //initialize ADS1x15
+  
   // The ADC input range (or gain) can be changed via the following
   // functions, but be careful never to exceed VDD +0.3V max, or to
   // exceed the upper and lower limits if you adjust the input range!
@@ -125,7 +124,8 @@ float ADS1x15Sensor::getTNTC(uint8_t channel) {
 //get string with measurement values
 String ADS1x15Sensor::getSensorString(void) {
   String s;
-  
+
+  //------------------------------------------
 #ifdef ADS1x150ADC
   s += String("ADC0  ");
 #endif //ADS1x150ADC
@@ -142,6 +142,7 @@ String ADS1x15Sensor::getSensorString(void) {
   s += String("ADC3  ");
 #endif //ADS1x153ADC
 
+  //------------------------------------------
 #ifdef ADS1x150NTC
   s += String("NTC0[C]  ");
 #endif //ADS1x150NTC
@@ -166,6 +167,7 @@ String ADS1x15Sensor::getSensorString(void) {
 String ADS1x15Sensor::getMeasurementsString(void) {
   String s;
 
+  //------------------------------------------
 #ifdef ADS1x150ADC
   s += String(_adc[0]);//ADS1x150ADC
   s += ("  ");
@@ -186,6 +188,7 @@ String ADS1x15Sensor::getMeasurementsString(void) {
   s += ("  ");
 #endif //ADS1x153ADC
 
+  //------------------------------------------
 #ifdef ADS1x150NTC
   s += String(_tntc[0]);//ADS1x150ADC
   s += ("  ");
@@ -213,9 +216,11 @@ String ADS1x15Sensor::getMeasurementsString(void) {
 //get JSON doc with measurement values
 void ADS1x15Sensor::getJSONDoc(JsonDocument &doc) {
 
+  //------------------------------------------
   //clear
   doc.clear();
 
+  //------------------------------------------
   //channel 0
 #ifdef ADS1x150ADC
   if ( ! isnan(_adc[0])) doc["ADC0"] = _adc[0];
@@ -226,6 +231,7 @@ void ADS1x15Sensor::getJSONDoc(JsonDocument &doc) {
   else doc["NTC0"] = "\"NaN\"";
 #endif //ADS1x150NTC
 
+  //------------------------------------------
   //channel 1
 #ifdef ADS1x151ADC
   if ( ! isnan(_adc[1])) doc["ADC1"] = _adc[1];
@@ -236,6 +242,7 @@ void ADS1x15Sensor::getJSONDoc(JsonDocument &doc) {
   else doc["NTC1"] = "\"NaN\"";
 #endif //ADS1x151NTC
 
+  //------------------------------------------
   //channel 2
 #ifdef ADS1x152ADC
   if ( ! isnan(_adc[2])) doc["ADC2"] = _adc[2];
@@ -246,6 +253,7 @@ void ADS1x15Sensor::getJSONDoc(JsonDocument &doc) {
   else doc["NTC2"] = "\"NaN\"";
 #endif //ADS1x152NTC
 
+  //------------------------------------------
   //channel 3
 #ifdef ADS1x150ADC
   if ( ! isnan(_adc[3])) doc["ADC3"] = _adc[3];
@@ -256,6 +264,7 @@ void ADS1x15Sensor::getJSONDoc(JsonDocument &doc) {
   else doc["NTC3"] = "\"NaN\"";
 #endif //ADS1x153NTC
 
+  //------------------------------------------
   //sensor name
   doc["sensor"] = _name;
   

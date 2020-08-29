@@ -17,17 +17,21 @@ String TRHSensor::getMeasurementsString(void) {
 //get JSON doc with measurement values
 void TRHSensor::getJSONDoc(JsonDocument &doc) {
 
+  //------------------------------------------
   //clear
   doc.clear();
 
+  //------------------------------------------
   //temperature
   if ( ! isnan(_temp)) doc["temp"] = _temp;
   else doc["temp"] = "\"NaN\"";
 
+  //------------------------------------------
   //relative humidity
   if ( ! isnan(_rh)) doc["rh"] = _rh;
   else doc["rh"] = "\"NaN\"";
 
+  //------------------------------------------
   //dew point
   if ( ! isnan(_dp)) {
     doc["dewpoint"] = _dp;
@@ -38,9 +42,10 @@ void TRHSensor::getJSONDoc(JsonDocument &doc) {
     doc["dewpstatus"] = "\"NaN\"";
   }
 
+  //------------------------------------------
   //sensor name
   doc["sensor"] = _name;
-  
+
   return;
 }
 

@@ -14,10 +14,12 @@ SPS30Sensor::SPS30Sensor(bool average) {
 //initialize SPS30 sensor
 int SPS30Sensor::init(void) {
 
+  //------------------------------------------
   //initialize I2C communication
   sensirion_i2c_init();
-    
-    //probe SPS30
+
+  //------------------------------------------  
+  //probe SPS30
   for (int ii = 0; ii < 10; ii++) {
     if (sps30_probe() != 0) {
 #ifdef VERBOSE
@@ -31,6 +33,7 @@ int SPS30Sensor::init(void) {
     delay(500); //ms
   }
 
+  //------------------------------------------
   //SPS30 serial number
 #ifdef VERBOSE
   if (_sps30available) {
@@ -44,6 +47,7 @@ int SPS30Sensor::init(void) {
   }
 #endif //VERBOSE
 
+  //------------------------------------------
   //set auto-cleaning
   if (_sps30available) {
     _ret = sps30_set_fan_auto_cleaning_interval_days(_auto_clean_days);
@@ -55,6 +59,7 @@ int SPS30Sensor::init(void) {
     }
   }
 
+  //------------------------------------------
   //start measurement
   if (_sps30available) {
     _ret = sps30_start_measurement();
@@ -66,6 +71,7 @@ int SPS30Sensor::init(void) {
     }
   }
 
+  //------------------------------------------
   //I2C buffer size
 #ifdef SPS30_LIMITED_I2C_BUFFER_SIZE
   Serial.println("The hardware has a limitation that only");
@@ -74,7 +80,10 @@ int SPS30Sensor::init(void) {
   Serial.println("  https://github.com/Sensirion/arduino-sps#esp8266-partial-legacy-support\n");
 #endif //SPS30_LIMITED_I2C_BUFFER_SIZE
 
+  //------------------------------------------
+  //initialize value
   _dustnc = std::numeric_limits<float>::quiet_NaN();
+  
   return 0;
 }
 
@@ -84,7 +93,8 @@ float SPS30Sensor::simplyRead(void) {
   
   if (!_sps30available) return std::numeric_limits<float>::quiet_NaN();
 
-  //try to read data from SPS30
+  //------------------------------------------
+  //check if data from SPS30 is ready
   for (int ii = 0; ii < 10; ii++) {
     _ret = sps30_read_data_ready(&_data_ready);
     if (_ret < 0) {
@@ -103,6 +113,7 @@ float SPS30Sensor::simplyRead(void) {
     delay(100);//ms
   };
 
+  //------------------------------------------
   //read SPS30 measurement
   _ret = sps30_read_measurement(&_m);
   if (_ret < 0) {
@@ -153,7 +164,7 @@ void SPS30Sensor::readData(void) {
 //get string with measurement values
 String SPS30Sensor::getMeasurementsString(void) {
   String s;
-  s += String(_dustnc, 3); //dust concentration (0.5-10 µm)
+  s += String(_dustnc, 3); //dust concentration (0.5-10 µm) [cm^-3]
   s += ("       ");
   return s;
 }
@@ -162,13 +173,16 @@ String SPS30Sensor::getMeasurementsString(void) {
 //get JSON doc with measurement values
 void SPS30Sensor::getJSONDoc(JsonDocument &doc) {
 
+  //------------------------------------------
   //clear
   doc.clear();
 
+  //------------------------------------------
   //dust concentration
   if ( ! isnan(_dustnc)) doc["dustnc"] = _dustnc;
   else doc["dustnc"] = "\"NaN\"";
 
+  //------------------------------------------
   //sensor name
   doc["sensor"] = _name;
   

@@ -1,3 +1,7 @@
+/*
+ * Wifi handling.
+ */
+
 //******************************************
 //libraries
 #include "config.h"
@@ -17,6 +21,7 @@ const char* password = WIFIPASSWORD;
 //connect
 void wifiConnect() {
 
+  //------------------------------------------
   //check if already conncted to wifi
   if (WiFi.status() == WL_CONNECTED) {
 #ifdef VERBOSE
@@ -26,6 +31,8 @@ void wifiConnect() {
     return;
   }
 
+  //------------------------------------------
+  //wifi begin
   //https://github.com/esp8266/Arduino/issues/2702
   WiFi.disconnect();
   WiFi.begin(ssid, password);
@@ -36,9 +43,11 @@ void wifiConnect() {
   Serial.println(ssid);
 #endif //VERBOSE
 
+  //------------------------------------------
   //try connecting for 20 times with 1 s intervals
   for (int ii = 0; ii < 20; ii++) {
 
+    //------------------------------------------
     //status
 #ifdef VERBOSE
     Serial.print("status: ");
@@ -71,6 +80,8 @@ void wifiConnect() {
     }
 #endif //VERBOSE
 
+    //------------------------------------------
+    //print connection info
     if (WiFi.status() == WL_CONNECTED) {
 #ifdef VERBOSE
       Serial.println();
@@ -85,10 +96,13 @@ void wifiConnect() {
       break;
     }
 
+    //------------------------------------------
     //delay between trials
     delay(1000);//ms
   }
 
+//------------------------------------------
+//print connection error
 #ifdef VERBOSE
   if (WiFi.status() != WL_CONNECTED) {
     Serial.print("could not connect to ");

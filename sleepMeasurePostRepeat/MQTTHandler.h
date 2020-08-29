@@ -1,3 +1,7 @@
+/*
+ * MQTT handling.
+ */
+
 #ifndef MQTTHANDLER
 #define MQTTHANDLER
 
@@ -23,6 +27,7 @@ static const char alphanum[] = "0123456789"
 //connect to MQTT broker
 void MQTTConnect(PubSubClient &mqttclient, const char* mqttserver, uint16_t mqttport, const char* mqttusername, const char* mqttpassword) {
 
+  //------------------------------------------
   //check if already conncted to MQTT server
   if (mqttclient.connected()) {
 #ifdef VERBOSE
@@ -31,17 +36,20 @@ void MQTTConnect(PubSubClient &mqttclient, const char* mqttserver, uint16_t mqtt
 #endif //VERBOSE
     return;
   }
-  
-  //show status
+
+  //------------------------------------------
+  //print status
 #ifdef VERBOSE
   Serial.print("connecting to MQTT server ");
   Serial.print(mqttserver);
   Serial.println("...");
 #endif //VERBOSE
 
+  //------------------------------------------
   //try connecting for 10 times with 1 s intervals
   for (int ii = 0; ii < 10; ii++) {
 
+    //------------------------------------------
     //generate random clientID
     for (int i = 0; i < 10; i++) {
       clientID[i] = alphanum[random(51)];
@@ -55,9 +63,11 @@ void MQTTConnect(PubSubClient &mqttclient, const char* mqttserver, uint16_t mqtt
     Serial.println(clientID);
 #endif //VERBOSE
 
+    //------------------------------------------
     //connect
     mqttclient.connect(clientID, mqttusername, mqttpassword);
 
+    //------------------------------------------
     //connection status
     //print to know why the connection failed
     //see http://pubsubclient.knolleary.net/api.html#state for the failure code explanation
@@ -101,7 +111,8 @@ void MQTTConnect(PubSubClient &mqttclient, const char* mqttserver, uint16_t mqtt
     }
 #endif //VERBOSE
 
-    //upon successful connection
+    //------------------------------------------
+    //print connection info
     if (mqttclient.connected()) {
 #ifdef VERBOSE
       Serial.print("MQTT connected to ");
@@ -110,6 +121,7 @@ void MQTTConnect(PubSubClient &mqttclient, const char* mqttserver, uint16_t mqtt
       break;
     }
 
+    //------------------------------------------
     //delay between trials
     delay(1000);//ms
   }//END connecting loop
@@ -125,6 +137,7 @@ void postValues(PubSubClient &mqttclient, const char* mqttserver, uint16_t mqttp
   char message[measureJson(doc) + 1];
   serializeJson(doc, message, measureJson(doc) + 1);
 
+  //------------------------------------------
   //convert topic string to char array
   char topic[topicString.length()];
   topicString.toCharArray(topic, topicString.length() + 1);
@@ -178,9 +191,9 @@ void postValues(PubSubClient &mqttclient, const char* mqttserver, uint16_t mqttp
     }
   }
 
-#ifndef CAFFEINE
   //------------------------------------------
   //disconnect before leaving
+#ifndef CAFFEINE
   WiFi.disconnect();
 #endif //CAFFEINE
 
