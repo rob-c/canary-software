@@ -1,3 +1,4 @@
+
 /*
  * This sketch measures values from the connected sensors, prints them to serial output and sends them to a server.
  * Both ESP8266 and ESP32 MCUs are supported. Other MCUs may be compatible too.
@@ -106,8 +107,8 @@ void setup() {
 
   //SHT35B
 #ifdef SHT35B
-  SHTxxSensor* sht35a = new SHTxxSensor(SHTxxSensor::sht35a);
-  sensors.emplace_back(sht35a);
+  SHTxxSensor* sht35b = new SHTxxSensor(SHTxxSensor::sht35b);
+  sensors.emplace_back(sht35b);
 #endif //SHT35B
 
   //SHT85
@@ -239,10 +240,34 @@ void readPrintPost() {
     //post measurements
     masterdoc.clear();
     for (auto&& sensor : sensors) {
+      sensordoc.clear();
       sensor->getJSONDoc(sensordoc);
+      addMetaData(sensordoc);
       masterdoc.add(sensordoc);
     }
 #if defined(POST) or defined(VERBOSE)
     postValues(mqttclient, mqttserver, mqttport, mqttusername, mqttpassword, masterdoc, topicString);
 #endif //POST or VERBOSE
 } //readPrintPost()
+
+//******************************************
+//add metadata to JSON document
+void addMetaData(JsonDocument &doc) {
+#ifdef INSTITUTE
+  doc["institute"] = INSTITUTE;
+#endif //INSTITUTE
+#ifdef ROOM
+  doc["room"] = ROOM;
+#endif //ROOM
+#ifdef LOCATION
+  doc["location"] = LOCATION;
+#endif //LOCATION
+#ifdef NAME
+  doc["name"] = NAME;
+#elif defined(POST) or defined(VERBOSE)
+#ifdef MACASNAME
+  doc["name"] = WiFi.macAddress();
+#endif //MACASNAME
+#endif //NAME or (POST or VERBOSE)
+  return;
+}
