@@ -8,7 +8,7 @@
 //******************************************
 //setup
 #define CAFFEINE //do not go to sleep; use if not battery operated
-#define SLEEPTIME (10) //sleep interval [s]
+#define SLEEPTIME (20) //sleep interval [s]
 #define INTEGRATIONTIME (1) //measurements integration time interval [s]
 //#define PRINTSERIAL //print measurements to serial output
 //#define POST //connect and post measurements to MQTT server
@@ -37,8 +37,8 @@
 
 //******************************************
 //SHT temperature and humidity sensors
-//#define SHT35A //SHT35 A (0x44 address)
-#define SHT35B //SHT35 B (0x45 address)
+#define SHT35A //SHT35 A (0x44 address)
+//#define SHT35B //SHT35 B (0x45 address)
 //#define SHT85 //SHT85 (0x44 address)
 
 //******************************************
@@ -51,7 +51,7 @@
 #else //ESP32
 #define MAX31865CS (33) //CS pin for ESP32
 #endif
-#define MAX31865RHSOURCE (sht35b) //RH measurement source for dew point calculation; use instance name from sleepMeasurePostRepeat.ino
+#define MAX31865RHSOURCE (sht35a) //RH measurement source for dew point calculation; use instance name from sleepMeasurePostRepeat.ino
 
 //******************************************
 //SPS30 dust particle counter
@@ -61,7 +61,7 @@
 //******************************************
 //ADS1x15 ADCs and NTCs
 //#define ADS1015 //ADS1015 (12 bit)
-//#define ADS1115 //ADS1115 (16 bit)
+#define ADS1115 //ADS1115 (16 bit)
 #define ADS1x15VDD (3.3)//VDD [V]
 #define ADS1x15VREF (4.096)//ADC reference voltage [V] //NOTE valid for ADC gain set to 1, see ADS1x15GAIN
 #define ADS1x15GAIN (GAIN_ONE) //ADC gain: 1x gain  +/- 4.096V  1 bit = 2mV (ADS1015) or 0.125mV (ADS1115), see ADS1x15VREF
