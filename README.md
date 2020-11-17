@@ -1,3 +1,3 @@
-# CanaryFirmware
+# Canary software
 
-Canary firmware.
+This is the software to operate a Canary.
