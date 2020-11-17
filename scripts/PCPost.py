@@ -5,9 +5,11 @@
 #NOTE: this scripts runs once and then terminates.
 #NOTE: SLEEPTIME in sleepMeasurePostRepeat should be equal to the interval used to read the serial output.
 #NOTE: add this script to the PC crontab, for example to run it every 20 seconds:
-#      * * * * * timeout 20 python3 PCPost.py
-#      * * * * * sleep 20; timeout 20 python3 PCPost.py
-#      * * * * * sleep 40; timeout 20 python3 PCPost.py
+#      * * * * * timeout 20 python3 /path/to/PCPost.py -p /dev/ttyUSB0
+#      * * * * * sleep 20; timeout 20 python3 /path/to/PCPost.py -p /dev/ttyUSB0
+#      * * * * * sleep 40; timeout 20 python3 /path/to/PCPost.py -p /dev/ttyUSB0
+#NOTE: the full path to PCPost.py should be specified.
+#NOTE: check the name of the device under /dev/ and pass it as option -p; by default this is assumed to be /dev/ttyUSB0
 # Author: Francesco Guescini.
 
 #******************************************
@@ -124,7 +126,7 @@ if __name__ == '__main__':
     #------------------------------------------
     #parse input arguments
     parser = argparse.ArgumentParser(description='%prog [options]')
-    parser.add_argument('-p', '--port', dest='port', default='/dev/cu.SLAB_USBtoUART', help='serial port, usually "/dev/cu.SLAB_USBtoUART" or "/dev/ttyUSB0"')
+    parser.add_argument('-p', '--port', dest='port', default='/dev/ttyUSB0', help='serial port, usually "/dev/cu.SLAB_USBtoUART" or "/dev/ttyUSB0"')
     parser.add_argument('-b', '--baudrate', dest='baudrate', default=115200, help='baud rate')
     parser.add_argument('-r', '--readonly', dest='readonly', action='store_true', default=False, help='read only')
     parser.add_argument('-q', '--quiet', dest='quiet', action='store_true', default=False, help='read but do not post')
