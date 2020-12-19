@@ -25,7 +25,7 @@ static const char alphanum[] = "0123456789"
 
 //******************************************
 //connect to MQTT broker
-void MQTTConnect(PubSubClient &mqttclient, const char* mqttserver, uint16_t mqttport, const char* mqttusername, const char* mqttpassword) {
+void MQTTConnect(PubSubClient &mqttclient, const char* mqttserver, unsigned int mqttport, const char* mqttusername, const char* mqttpassword) {
 
   //------------------------------------------
   //check if already conncted to MQTT server
@@ -130,7 +130,7 @@ void MQTTConnect(PubSubClient &mqttclient, const char* mqttserver, uint16_t mqtt
 
 //******************************************
 //post values from enbled sensors
-void postValues(PubSubClient &mqttclient, const char* mqttserver, uint16_t mqttport, const char* mqttusername, const char* mqttpassword, JsonDocument &doc, String topicString) {
+void postValues(PubSubClient &mqttclient, const char* mqttserver, unsigned int mqttport, const char* mqttusername, const char* mqttpassword, JsonDocument &doc, String mqtttopic) {
 
   //------------------------------------------
   //convert message JSON to char array
@@ -139,8 +139,8 @@ void postValues(PubSubClient &mqttclient, const char* mqttserver, uint16_t mqttp
 
   //------------------------------------------
   //convert topic string to char array
-  char topic[topicString.length()];
-  topicString.toCharArray(topic, topicString.length() + 1);
+  char topic[mqtttopic.length()];
+  mqtttopic.toCharArray(topic, mqtttopic.length() + 1);
 
   //------------------------------------------
   //print info
@@ -180,14 +180,13 @@ void postValues(PubSubClient &mqttclient, const char* mqttserver, uint16_t mqttp
     if (mqttclient.connected()) {
       if (mqttclient.publish(topic, message)) {
 #ifdef VERBOSE
-        Serial.println("success");
+        Serial.println("success\n");
 #endif //VERBOSE
       } else {
 #ifdef VERBOSE
-        Serial.println("fail");
+        Serial.println("fail\n");
 #endif //VERBOSE
       }
-      Serial.println();
     }
   }
 
