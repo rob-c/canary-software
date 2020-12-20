@@ -1,4 +1,4 @@
-# Canary software
+# canary-software
 
 This is the software to operate a Canary.  
 Refer to the [Canary Wiki](https://gitlab.cern.ch/guescini/canary/-/wikis/home) for additional information and instructions.
