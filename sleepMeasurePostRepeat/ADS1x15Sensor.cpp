@@ -174,17 +174,17 @@ String ADS1x15Sensor::getMeasurementsString(void) {
 #endif //ADS1x150ADC
 
 #ifdef ADS1x151ADC
-  s += String(_adc[1]);//ADS1x150ADC
+  s += String(_adc[1]);//ADS1x151ADC
   s += ("  ");
 #endif //ADS1x151ADC
 
 #ifdef ADS1x152ADC
-  s += String(_adc[2]);//ADS1x150ADC
+  s += String(_adc[2]);//ADS1x152ADC
   s += ("  ");
 #endif //ADS1x152ADC
 
 #ifdef ADS1x153ADC
-  s += String(_adc[3]);//ADS1x150ADC
+  s += String(_adc[3]);//ADS1x153ADC
   s += ("  ");
 #endif //ADS1x153ADC
 
@@ -195,17 +195,17 @@ String ADS1x15Sensor::getMeasurementsString(void) {
 #endif //ADS1x150NTC
 
 #ifdef ADS1x151NTC
-  s += String(_tntc[1]);//ADS1x150ADC
+  s += String(_tntc[1]);//ADS1x151ADC
   s += ("  ");
 #endif //ADS1x151NTC
 
 #ifdef ADS1x152NTC
-  s += String(_tntc[2]);//ADS1x150ADC
+  s += String(_tntc[2]);//ADS1x152ADC
   s += ("  ");
 #endif //ADS1x152NTC
 
 #ifdef ADS1x153NTC
-  s += String(_tntc[3]);//ADS1x150ADC
+  s += String(_tntc[3]);//ADS1x153ADC
   s += ("  ");
 #endif //ADS1x153NTC
 
