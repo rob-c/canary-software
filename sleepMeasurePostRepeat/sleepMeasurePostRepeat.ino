@@ -18,7 +18,6 @@
 #include "memory"
 #include "AsyncDelay.h"
 #include "ArduinoJson.h"
-#include "guescio.h" //TEST
 
 //wifi and MQTT
 #if POST or VERBOSE
@@ -137,7 +136,7 @@ void setup() {
   //------------------------------------------
   //initialize sensors
   for (auto&& sensor : sensors) {
-      sensor->init();
+      sensor->init(VERBOSE);
   }
 
   //------------------------------------------
@@ -190,7 +189,7 @@ void loop() {
   //integrate sensor measurements (if averaging is enabled)
   if (integrationTime.isExpired()) {
     for (auto&& sensor : sensors) {
-      sensor->integrate();
+      sensor->integrate(VERBOSE);
     }
     integrationTime.repeat();
   }
@@ -221,7 +220,7 @@ void readPrintPost() {
     //------------------------------------------
     //read measurements
     for (auto&& sensor : sensors) {
-      sensor->readData();
+      sensor->readData(VERBOSE);
     }
     
     //------------------------------------------

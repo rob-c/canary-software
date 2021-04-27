@@ -16,10 +16,10 @@ class SPS30Sensor: public virtual Sensor {
   //------------------------------------------
   public:
     SPS30Sensor(bool average);
-    int init(void) override;
-    float simplyRead(void);
-    void readData(void) override;
-    void integrate(void) override;
+    int init(bool verbose=false) override;
+    float simplyRead(bool verbose=false);
+    void readData(bool verbose=false) override;
+    void integrate(bool verbose=false) override;
     float getDustConcentration(void) {return _dustnc;}
     String getSensorString(void) override {return "dust[cm^-3] ";}
     String getMeasurementsString(void) override;

@@ -18,8 +18,8 @@ class ADS1x15Sensor: public virtual Sensor {
   //------------------------------------------
   public:
     ADS1x15Sensor(float vdd, float vref);
-    int init(void) override;
-    void readData() override;
+    int init(bool verbose=false) override;
+    void readData(bool verbose=false) override;
     String getSensorString(void) override;
     String getMeasurementsString(void) override;
     void getJSONDoc(JsonDocument &doc) override;

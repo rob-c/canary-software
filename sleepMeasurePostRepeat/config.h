@@ -55,7 +55,7 @@
 
 //******************************************
 //SPS30 dust particle counter
-//#define SPS30
+#define SPS30
 #define SPS30AVERAGE (true)//average over multiple SPS30 measurements (one per second)
 
 //******************************************
