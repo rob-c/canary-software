@@ -7,12 +7,12 @@
 
 //******************************************
 //setup
-#define CAFFEINE //do not go to sleep; use if not battery operated
+#define CAFFEINE (true) //do not go to sleep; use if not battery operated
 #define SLEEPTIME (60) //sleep interval [s]
 #define INTEGRATIONTIME (1) //measurements integration time interval [s]
-//#define PRINTSERIAL //print measurements to serial output
-//#define POST //connect and post measurements to MQTT server
-#define VERBOSE //print connection status and posting details
+#define PRINTSERIAL (false) //print measurements to serial output
+#define POST (true) //connect and post measurements to MQTT server
+#define VERBOSE (true) //print connection status and posting details
 //#define ESP8266 //use an ESP8266 MCU instead of an ESP32 MCU (default)
 
 //******************************************
@@ -43,7 +43,7 @@
 
 //******************************************
 //MAX31865 RTD sensor
-#define MAX31865 //MAX31865
+//#define MAX31865 //MAX31865
 #define MAX31865RNOM (1000) //sensor nominal resistance at 0 C (100 Ohm or 1000 Ohm) [Ohm]
 #define MAX31865RREF (4020) //reference resistor [Ohm]
 #ifdef ESP8266 //ESP8266
@@ -51,11 +51,11 @@
 #else //ESP32
 #define MAX31865CS (33) //CS pin for ESP32
 #endif
-#define MAX31865RHSOURCE (sht35b) //RH measurement source for dew point calculation; use instance name from sleepMeasurePostRepeat.ino
+//#define MAX31865RHSOURCE (sht35b) //RH measurement source for dew point calculation; use instance name from sleepMeasurePostRepeat.ino
 
 //******************************************
 //SPS30 dust particle counter
-#define SPS30
+//#define SPS30
 #define SPS30AVERAGE (true)//average over multiple SPS30 measurements (one per second)
 
 //******************************************
@@ -68,32 +68,32 @@
 
 //ADC0/NTC0 (channel 0)
 //#define ADS1x150ADC //NOTE set also the voltage divider resistor value
-//#define ADS1x150NTC //NOTE set also the voltage divider resistor value and NTC R0, T0 and B values
+#define ADS1x150NTC //NOTE set also the voltage divider resistor value and NTC R0, T0 and B values
 #define ADS1x150RDIV (49.9e3) //ADC voltage divider resistor value [Ohm] //49.9e3
-#define ADS1x150R0 (1e4) //NTC R0 [Ohm] //1e4
+#define ADS1x150R0 (4.7e3) //NTC R0 [Ohm] //1e4
 #define ADS1x150T0 (298.15) //NTC T0 [K] //298.15
-#define ADS1x150B (3435) //NTC B //3435
+#define ADS1x150B (3650) //NTC B //3435
 
 //ADC1/NTC1 (channel 1)
 //#define ADS1x151ADC //NOTE set also the voltage divider resistor value
-//#define ADS1x151NTC //NOTE set also the voltage divider resistor value and NTC R0, T0 and B values
+#define ADS1x151NTC //NOTE set also the voltage divider resistor value and NTC R0, T0 and B values
 #define ADS1x151RDIV (49.9e3) //ADC voltage divider resistor value [Ohm] //49.9e3
-#define ADS1x151R0 (1e4) //NTC R0 [Ohm] //1e4
+#define ADS1x151R0 (4.7e3) //NTC R0 [Ohm] //1e4
 #define ADS1x151T0 (298.15) //NTC T0 [K] //298.15
-#define ADS1x151B (3435) //NTC B //3435
+#define ADS1x151B (3650) //NTC B //3435
 
 //ADC2/NTC2 (channel 2)
 //#define ADS1x152ADC //NOTE set also the voltage divider resistor value
-//#define ADS1x152NTC //NOTE set also the voltage divider resistor value and NTC R0, T0 and B values
+#define ADS1x152NTC //NOTE set also the voltage divider resistor value and NTC R0, T0 and B values
 #define ADS1x152RDIV (49.9e3) //ADC voltage divider resistor value [Ohm] //49.9e3
-#define ADS1x152R0 (1e4) //NTC R0 [Ohm] //1e4
+#define ADS1x152R0 (4.7e3) //NTC R0 [Ohm] //1e4
 #define ADS1x152T0 (298.15) //NTC T0 [K] //298.15
-#define ADS1x152B (3435) //NTC B //3435
+#define ADS1x152B (3650) //NTC B //3435
 
 //ADC3/NTC3 (channel 3)
-//#define ADS1x153ADC //NOTE set also the voltage divider resistor value
-//#define ADS1x153NTC //NOTE set also the voltage divider resistor value and NTC R0, T0 and B values
+#define ADS1x153ADC //NOTE set also the voltage divider resistor value
+#define ADS1x153NTC //NOTE set also the voltage divider resistor value and NTC R0, T0 and B values
 #define ADS1x153RDIV (49.9e3) //ADC voltage divider resistor value [Ohm] //49.9e3
-#define ADS1x153R0 (1e4) //NTC R0 [Ohm] //1e4/22e3/4.7e3
+#define ADS1x153R0 (4.7e3) //NTC R0 [Ohm] //1e4/22e3/4.7e3
 #define ADS1x153T0 (298.15) //NTC T0 [K] //298.15
-#define ADS1x153B (3435) //NTC B //3435/4000/3650
+#define ADS1x153B (3650) //NTC B //3435/4000/3650

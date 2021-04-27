@@ -17,17 +17,13 @@
 #include "vector"
 #include "memory"
 #include "AsyncDelay.h"
+#include "ArduinoJson.h"
+#include "guescio.h" //TEST
 
 //wifi and MQTT
-#if defined(POST) or defined(VERBOSE)
+#if POST or VERBOSE
 #include "WiFiHandler.h"
 #include "MQTTHandler.h"
-#include "PubSubClient.h"
-#ifdef ESP32
-#include "WiFi.h" //ESP32
-#else
-#include "ESP8266WiFi.h" //ESP8266
-#endif //ESP32
 #endif //POST or VERBOSE
 
 //SHTxx
@@ -51,15 +47,16 @@
 #endif //ADS1015 or ADS1115
 
 //******************************************
-//MQTT
-#if defined(POST) or defined(VERBOSE)
-WiFiClient wificlient;
-PubSubClient mqttclient(wificlient);
-const char* mqttserver = MQTTSERVER;
-const unsigned int mqttport = MQTTPORT;
-const char* mqttusername = MQTTUSERNAME;
-const char* mqttpassword = MQTTPASSWORD;
-const String mqtttopic = MQTTTOPIC;
+//wifi and MQTT setup
+#if POST or VERBOSE
+WiFiHandler wifihandler(WIFISSID,
+			WIFIPASSWORD);
+MQTTHandler mqtthandler(MQTTSERVER,
+			MQTTPORT,
+			MQTTUSERNAME,
+			MQTTPASSWORD,
+			MQTTTOPIC,
+			MQTTMESSAGESIZE);
 #endif //POST or VERBOSE
 
 //******************************************
@@ -89,10 +86,9 @@ void setup() {
 
   //------------------------------------------
   //MQTT setup
-#ifdef POST
-  wifiConnect();
-  mqttclient.setServer(mqttserver, mqttport);
-  mqttclient.setBufferSize(MQTTMESSAGESIZE);
+#if POST
+  wifihandler.connect(VERBOSE);
+  mqtthandler.init();
 #endif //POST
 
   //------------------------------------------
@@ -146,7 +142,7 @@ void setup() {
 
   //------------------------------------------
   //print list of sensors
-#if defined(PRINTSERIAL) or defined(VERBOSE)
+#if PRINTSERIAL or VERBOSE
   Serial.println("available sensors:");
   for (auto&& sensor : sensors) {
       Serial.print("\t");
@@ -157,7 +153,7 @@ void setup() {
 
   //------------------------------------------
   //print measurement names and units
-#ifdef PRINTSERIAL
+#if PRINTSERIAL
   for (auto&& sensor : sensors) {
       Serial.print(sensor->getSensorString());
   }
@@ -167,7 +163,7 @@ void setup() {
   //------------------------------------------
   //read, print and post values before going to sleep
   //NOTE this is meant for battery operation (no caffeine)
-#ifndef CAFFEINE
+#if !CAFFEINE
   for (auto&& sensor : sensors) {
     sensor->integrate();
   }
@@ -177,8 +173,8 @@ void setup() {
 #endif //CAFFEINE
   
   //------------------------------------------
-  //timing
-#ifdef CAFFEINE
+  //start asynchronous timing
+#if CAFFEINE
   MQTTTime.start(MQTTTIME*1e3, AsyncDelay::MILLIS);
   integrationTime.start(INTEGRATIONTIME*1e3, AsyncDelay::MILLIS);
   sleepTime.start(SLEEPTIME*1e3, AsyncDelay::MILLIS);
@@ -208,9 +204,9 @@ void loop() {
 
   //------------------------------------------
   //MQTT check-in loop
-#ifdef POST
+#if POST
   if (MQTTTime.isExpired()) {
-    mqttclient.loop();
+    mqtthandler.loop();
     MQTTTime.repeat();
   }
 #endif //POST
@@ -230,7 +226,7 @@ void readPrintPost() {
     
     //------------------------------------------
     //print measurements
-#ifdef PRINTSERIAL
+#if PRINTSERIAL
     for (auto&& sensor : sensors) {
       Serial.print(sensor->getMeasurementsString());
     }
@@ -246,9 +242,18 @@ void readPrintPost() {
       addMetaData(sensordoc);
       masterdoc.add(sensordoc);
     }
-#if defined(POST) or defined(VERBOSE)
-    postValues(mqttclient, mqttserver, mqttport, mqttusername, mqttpassword, masterdoc, mqtttopic);
+#if POST or VERBOSE
+    wifihandler.connect(VERBOSE);
+    mqtthandler.post(masterdoc, POST, !CAFFEINE, VERBOSE);
+
+    //------------------------------------------
+    //disconnect before leaving
+#if not CAFFEINE
+    wifihandler.disconnect();    
+#endif //CAFFEINE
+
 #endif //POST or VERBOSE
+
 } //readPrintPost()
 
 //******************************************
@@ -265,10 +270,8 @@ void addMetaData(JsonDocument &doc) {
 #endif //LOCATION
 #ifdef NAME
   doc["name"] = NAME;
-#elif defined(POST) or defined(VERBOSE)
-#ifdef MACASNAME
-  doc["name"] = WiFi.macAddress();
-#endif //MACASNAME
-#endif //NAME or (POST or VERBOSE)
+#elif (POST or VERBOSE) and defined(MACASNAME)
+  doc["name"] = wifihandler.getMACAddress();
+#endif //NAME or ((POST or VERBOSE) and MACASNAME)
   return;
 }
