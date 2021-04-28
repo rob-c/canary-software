@@ -3,9 +3,7 @@
 //******************************************
 //wifi handler constructor
 WiFiHandler::WiFiHandler(char* ssid,
-			 char* password):
-  _client(WiFiClient())
-{
+			 char* password) {
   _ssid = ssid;
   _password = password;
   return;

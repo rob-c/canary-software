@@ -7,10 +7,16 @@
 
 //******************************************
 //libraries
-//NOTE include the WiFiHandler library so that it knows the correct wifi library to use
-#include "WiFiHandler.h"
 #include "PubSubClient.h"
 #include "ArduinoJson.h"
+#include "config.h"
+
+//ESP32 or ESP8266
+#ifdef ESP8266
+#include "ESP8266WiFi.h" //ESP8266
+#else
+#include "WiFi.h" //ESP32, default
+#endif //ESP32 or ESP8266
 
 //******************************************
 class MQTTHandler {
@@ -28,9 +34,8 @@ class MQTTHandler {
     bool connect(bool verbose=false);
     bool post(JsonDocument &doc,
 		  bool post=true,
-		  bool disconnect=false,
 		  bool verbose=false);
-    bool loop() {return _client.loop();}
+    bool loop() {return _mqttclient.loop();}
   
   //------------------------------------------
   private:
@@ -41,8 +46,8 @@ class MQTTHandler {
     char* _topic;
     unsigned int _messagesize;
     WiFiClient _wificlient;
-    PubSubClient _client;
+    PubSubClient _mqttclient;
     char _clientid[10];
-    char _alphanum[63] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    const char _alphanum[63] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 };
 #endif //MQTTHANDLER

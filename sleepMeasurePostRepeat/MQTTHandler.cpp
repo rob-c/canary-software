@@ -16,8 +16,8 @@ MQTTHandler::MQTTHandler(char* server,
   _messagesize = messagesize;
 
   _wificlient = WiFiClient();
-  _client = PubSubClient(_wificlient);
-  _client.setServer(_server, _port);
+  _mqttclient = PubSubClient(_wificlient);
+  _mqttclient.setServer(_server, _port);
 
   return;
 }
@@ -27,7 +27,7 @@ MQTTHandler::MQTTHandler(char* server,
 //NOTE setBufferSize cannot be chained with other pubSubClient methods
 //https://pubsubclient.knolleary.net/api#setBufferSize
 void MQTTHandler::init() {
-  _client.setBufferSize(_messagesize);
+  _mqttclient.setBufferSize(_messagesize);
   return;
 }
 
@@ -37,7 +37,7 @@ bool MQTTHandler::connect(bool verbose) {
 
   //------------------------------------------
   //check if already connected to the MQTT server
-  if (_client.connected()) {
+  if (_mqttclient.connected()) {
     if (verbose) {
       Serial.print("already connected to MQTT server ");
       Serial.println(_server);
@@ -73,7 +73,7 @@ bool MQTTHandler::connect(bool verbose) {
 
     //------------------------------------------
     //connect
-    _client.connect(_clientid, _username, _password);
+    _mqttclient.connect(_clientid, _username, _password);
 
     //------------------------------------------
     //check connection status
@@ -83,7 +83,7 @@ bool MQTTHandler::connect(bool verbose) {
 
     //------------------------------------------
     //print connection info
-    if (_client.connected()) {
+    if (_mqttclient.connected()) {
       if (verbose) {
 	Serial.print("MQTT connected to ");
 	Serial.println(_server);
@@ -114,7 +114,7 @@ bool MQTTHandler::connect(bool verbose) {
 //see http://pubsubclient.knolleary.net/api.html#state for the failure code explanation
 int MQTTHandler::status(bool verbose) {
 
-  int status = _client.state();
+  int status = _mqttclient.state();
     
   if (verbose) {
     Serial.print("status: ");
@@ -162,7 +162,6 @@ int MQTTHandler::status(bool verbose) {
 //post values from enbled sensors
 bool MQTTHandler::post(JsonDocument &doc,
 		       bool post,
-		       bool disconnect,
 		       bool verbose) {
 
   //------------------------------------------
@@ -209,7 +208,7 @@ bool MQTTHandler::post(JsonDocument &doc,
 
       //------------------------------------------
       //publish
-      result = _client.publish(_topic, message);
+      result = _mqttclient.publish(_topic, message);
       if (verbose) {
 	if (result) {
 	  Serial.println("success\n");
@@ -218,13 +217,6 @@ bool MQTTHandler::post(JsonDocument &doc,
 	}
       }
     }
-    
-    //------------------------------------------
-    //disconnect before leaving
-    if (disconnect) {
-      _client.disconnect();
-    }
-
   }
   
   return result;

@@ -13,7 +13,7 @@
 #define PRINTSERIAL (false) //print measurements to serial output
 #define POST (true) //connect and post measurements to MQTT server
 #define VERBOSE (true) //print connection status and posting details
-//#define ESP8266 //use an ESP8266 MCU instead of an ESP32 MCU (default)
+//#define ESP8266 //use an ESP8266 microcontroller instead of an ESP32 (default)
 
 //******************************************
 //wifi
@@ -24,7 +24,7 @@
 //MQTT
 #define MQTTMESSAGESIZE (1024) //maximum message length [byte]
 //#define MQTTSERVER ("127.0.0.1") //MQTT server address
-//#define MQTTSPORT (1883) //MQTT server port
+//#define MQTTPORT (1883) //MQTT server port
 //#define MQTTUSERNAME ("username") //MQTT username
 //#define MQTTPASSWORD ("password") //MQTT password
 //#define MQTTTOPIC ("topic") //MQTT topic

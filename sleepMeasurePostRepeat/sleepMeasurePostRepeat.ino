@@ -1,6 +1,6 @@
 /*
  * This sketch measures values from the connected sensors, prints them to serial output and sends them to a server.
- * Both ESP8266 and ESP32 MCUs are supported. Other MCUs may be compatible too.
+ * Both ESP8266 and ESP32 microcontrollers are supported. Other microcontrollers may be compatible too.
  * Printing and posting can be enabled/disabled by uncommenting/commenting the relative options in config.h.
  * To enable/disable a sensor, uncomment/comment its name in config.h.
  * All the available options can be set in config.h.
@@ -18,6 +18,7 @@
 #include "memory"
 #include "AsyncDelay.h"
 #include "ArduinoJson.h"
+#include "guescio.h"//TEST
 
 //wifi and MQTT
 #if POST or VERBOSE
@@ -162,14 +163,14 @@ void setup() {
   //------------------------------------------
   //read, print and post values before going to sleep
   //NOTE this is meant for battery operation (no caffeine)
-#if !CAFFEINE
+#if not CAFFEINE
   for (auto&& sensor : sensors) {
     sensor->integrate();
   }
   readPrintPost();
   Serial.println("now going to sleep zzz...");
   ESP.deepSleep(SLEEPTIME * 1e6); //µs
-#endif //CAFFEINE
+#endif //not CAFFEINE
   
   //------------------------------------------
   //start asynchronous timing
@@ -231,7 +232,8 @@ void readPrintPost() {
     }
     Serial.println();
 #endif //PRINTSERIAL
-    
+
+#if POST or VERBOSE
     //------------------------------------------
     //post measurements
     masterdoc.clear();
@@ -241,17 +243,16 @@ void readPrintPost() {
       addMetaData(sensordoc);
       masterdoc.add(sensordoc);
     }
-#if POST or VERBOSE
     wifihandler.connect(VERBOSE);
-    mqtthandler.post(masterdoc, POST, !CAFFEINE, VERBOSE);
+    mqtthandler.post(masterdoc, POST, VERBOSE);
 
     //------------------------------------------
     //disconnect before leaving
 #if not CAFFEINE
     wifihandler.disconnect();    
-#endif //CAFFEINE
-
+#endif //not CAFFEINE
 #endif //POST or VERBOSE
+
 
 } //readPrintPost()
 
@@ -269,8 +270,8 @@ void addMetaData(JsonDocument &doc) {
 #endif //LOCATION
 #ifdef NAME
   doc["name"] = NAME;
-#elif (POST or VERBOSE) and defined(MACASNAME)
+#elif defined(MACASNAME)
   doc["name"] = wifihandler.getMACAddress();
-#endif //NAME or ((POST or VERBOSE) and MACASNAME)
+#endif //NAME or MACASNAME
   return;
 }
