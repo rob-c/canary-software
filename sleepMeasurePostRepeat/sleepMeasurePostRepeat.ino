@@ -251,7 +251,7 @@ void readPrintPost() {
     //------------------------------------------
     //disconnect before leaving
 #if not CAFFEINE
-    wifihandler.disconnect();    
+    wifihandler.disconnect();
 #endif //not CAFFEINE
 #endif //POST or VERBOSE
 
