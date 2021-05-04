@@ -50,20 +50,16 @@
 #if POST or VERBOSE
 WiFiHandler wifihandler(WIFISSID,
 			WIFIPASSWORD);
-#if TLS
-char* cacert = CACERT;
-#else
-char* cacert = "";
-#endif //TLS
-
-MQTTHandler mqtthandler(MQTTSERVER,
+PubSubClient mqttclient;
+MQTTHandler mqtthandler(&mqttclient,
+			MQTTSERVER,
 			TLS? MQTTTLSPORT:MQTTPORT,
 			TLS,
 			MQTTUSERNAME,
 			MQTTPASSWORD,
 			MQTTTOPIC,
 			MQTTMESSAGESIZE,
-			cacert);
+			TLS? CACERT:"");
 #endif //POST or VERBOSE
 
 //******************************************
@@ -92,10 +88,9 @@ void setup() {
   Serial.println("\nsleep, measure, post, repeat\n");
 
   //------------------------------------------
-  //MQTT setup
+  //wifi connection
 #if POST
   wifihandler.connect(VERBOSE);
-  mqtthandler.init();
 #endif //POST
 
   //------------------------------------------

@@ -103,7 +103,6 @@
 
 //certification authority's ROOT certificate
 //TrustID X3 Root
-#if TLS
 #define CACERT (						       \
   "-----BEGIN CERTIFICATE-----\n"				       \
   "MIIDSjCCAjKgAwIBAgIQRK+wgNajJ7qJMDmGLvhAazANBgkqhkiG9w0BAQUFADA/\n" \
@@ -125,4 +124,3 @@
   "JDGFoqgCWjBH4d1QB7wCCZAA62RjYJsWvIjJEubSfZGL+T0yjWW06XyxV3bqxbYo\n" \
   "Ob8VZRzI9neWagqNdwvYkQsEjgfbKbYK7p2CNTUQ\n"                         \
   "-----END CERTIFICATE-----\n")
-#endif //TLS

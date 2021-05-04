@@ -2,7 +2,8 @@
 
 //******************************************
 //MQTT handler constructor
-MQTTHandler::MQTTHandler(char* server,
+MQTTHandler::MQTTHandler(PubSubClient* mqttclient,
+			 char* server,
 			 unsigned int port,
 			 bool tls,
 			 char* username,
@@ -10,7 +11,10 @@ MQTTHandler::MQTTHandler(char* server,
 			 char* topic,
 			 unsigned int messagesize,
 			 char* cacert) {
-  
+
+  //------------------------------------------
+  //MQTT handler setup
+  _mqttclient = mqttclient;
   _server = server;
   _port = port;
   _tls = tls;
@@ -19,7 +23,8 @@ MQTTHandler::MQTTHandler(char* server,
   _topic = topic;
   _messagesize = messagesize;
 
-  //TLS
+  //------------------------------------------
+  //TLS setup
   if (_tls) {
     _wificlientsecure = WiFiClientSecure();
 #ifdef ESP8266
@@ -28,23 +33,21 @@ MQTTHandler::MQTTHandler(char* server,
 #else
     _wificlientsecure.setCACert(cacert);
 #endif //ESP8266
-    _mqttclient = PubSubClient(_wificlientsecure);
+    _mqttclient->setClient(_wificlientsecure);
   }
-  
-  //no TLS
+
+  //------------------------------------------
+  //no TLS setup
   else {
     _wificlient = WiFiClient();
-    _mqttclient = PubSubClient(_wificlient);
+    _mqttclient->setClient(_wificlient);
   }
-  
-  return;
-}
 
-//******************************************
-//initialize MQTT handler
-void MQTTHandler::init() {
-  _mqttclient.setServer(_server, _port);
-  _mqttclient.setBufferSize(_messagesize);
+  //------------------------------------------
+  //MQTT client setup
+  _mqttclient->setServer(_server, _port);
+  _mqttclient->setBufferSize(_messagesize);
+  
   return;
 }
 
@@ -54,7 +57,7 @@ bool MQTTHandler::connect(bool verbose) {
 
   //------------------------------------------
   //check if already connected to the MQTT server
-  if (_mqttclient.connected()) {
+  if (_mqttclient->connected()) {
     if (verbose) {
       Serial.print("\nalready connected to MQTT server ");
       Serial.println(_server);
@@ -89,7 +92,7 @@ bool MQTTHandler::connect(bool verbose) {
 
     //------------------------------------------
     //connect
-    _mqttclient.connect(_clientid, _username, _password);
+    _mqttclient->connect(_clientid, _username, _password);
 
     //------------------------------------------
     //check connection status
@@ -99,7 +102,7 @@ bool MQTTHandler::connect(bool verbose) {
 
     //------------------------------------------
     //print connection info
-    if (_mqttclient.connected()) {
+    if (_mqttclient->connected()) {
       if (verbose) {
 	Serial.print("MQTT connected to ");
 	Serial.println(_server);
@@ -129,7 +132,7 @@ bool MQTTHandler::connect(bool verbose) {
 //http://pubsubclient.knolleary.net/api.html#state
 int MQTTHandler::status(bool verbose) {
 
-  int status = _mqttclient.state();
+  int status = _mqttclient->state();
     
   if (verbose) {
     Serial.print("status: ");
@@ -219,7 +222,7 @@ bool MQTTHandler::post(JsonDocument &doc,
 
       //------------------------------------------
       //publish
-      result = _mqttclient.publish(_topic, message);
+      result = _mqttclient->publish(_topic, message);
       if (verbose) {
 	if (result) {
 	  Serial.println("success\n");
