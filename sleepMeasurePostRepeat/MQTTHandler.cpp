@@ -4,29 +4,46 @@
 //MQTT handler constructor
 MQTTHandler::MQTTHandler(char* server,
 			 unsigned int port,
+			 bool tls,
 			 char* username,
 			 char* password,
 			 char* topic,
-			 unsigned int messagesize) {
+			 unsigned int messagesize,
+			 char* cacert) {
+  
   _server = server;
   _port = port;
+  _tls = tls;
   _username = username;
   _password = password;
   _topic = topic;
   _messagesize = messagesize;
 
-  _wificlient = WiFiClient();
-  _mqttclient = PubSubClient(_wificlient);
-  _mqttclient.setServer(_server, _port);
-
+  //TLS
+  if (_tls) {
+    _wificlientsecure = WiFiClientSecure();
+#ifdef ESP8266
+    X509List x509cacert(cacert);
+    _wificlientsecure.setTrustAnchors(&x509cacert);
+#else
+    _wificlientsecure.setCACert(cacert);
+#endif //ESP8266
+    _mqttclient = PubSubClient(_wificlientsecure);
+  }
+  
+  //no TLS
+  else {
+    _wificlient = WiFiClient();
+    _mqttclient = PubSubClient(_wificlient);
+  }
+  
   return;
 }
 
 //******************************************
 //initialize MQTT handler
-//NOTE setBufferSize cannot be chained with other pubSubClient methods
-//https://pubsubclient.knolleary.net/api#setBufferSize
 void MQTTHandler::init() {
+  _mqttclient.setServer(_server, _port);
   _mqttclient.setBufferSize(_messagesize);
   return;
 }
@@ -39,8 +56,9 @@ bool MQTTHandler::connect(bool verbose) {
   //check if already connected to the MQTT server
   if (_mqttclient.connected()) {
     if (verbose) {
-      Serial.print("already connected to MQTT server ");
+      Serial.print("\nalready connected to MQTT server ");
       Serial.println(_server);
+      Serial.println();
     }
     return true;
   }
@@ -62,8 +80,6 @@ bool MQTTHandler::connect(bool verbose) {
     for (int i = 0; i < 10; i++) {
       _clientid[i] = _alphanum[random(51)];
     }
-
-    //https://community.thingspeak.com/forum/esp8266-wi-fi/problem-rc-4-using-library-pubsub/
     _clientid[10] = '\0';
 
     if (verbose) {
@@ -109,9 +125,8 @@ bool MQTTHandler::connect(bool verbose) {
 }
 
 //******************************************
-//check the client status
-//this can explain why the connection may have failed
-//see http://pubsubclient.knolleary.net/api.html#state for the failure code explanation
+//check client status
+//http://pubsubclient.knolleary.net/api.html#state
 int MQTTHandler::status(bool verbose) {
 
   int status = _mqttclient.state();
@@ -170,11 +185,6 @@ bool MQTTHandler::post(JsonDocument &doc,
   serializeJson(doc, message, measureJson(doc) + 1);
 
   //------------------------------------------
-  //convert topic string to char array
-  //char topic[_topic.length()];
-  //_topic.toCharArray(topic, _topic.length() + 1);
-
-  //------------------------------------------
   //print info
   if (verbose) {
     Serial.println();
@@ -191,12 +201,13 @@ bool MQTTHandler::post(JsonDocument &doc,
     Serial.println(_server);
     Serial.print("port: ");
     Serial.println(_port);
+    Serial.printf("TLS: %s\n", _tls? "yes":"no");
     Serial.print("user: ");
     Serial.println(_username);
     Serial.print("auth: ");
     Serial.println(_password);
   }
-
+  
   //------------------------------------------
   //post data
   bool result=false;

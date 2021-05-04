@@ -16,8 +16,8 @@ class MAX31865Sensor: public virtual TRHSensor {
   //------------------------------------------
   public:
     MAX31865Sensor(float rnom, float rref, uint8_t cs, TRHSensor* rhsource = NULL);
-    int init(bool verbose=false) override;
-    void readData(bool verbose=false) override;
+    int init() override;
+    void readData() override;
     String getSensorString(void) override;
     String getMeasurementsString(void) override;
     void getJSONDoc(JsonDocument &doc) override;

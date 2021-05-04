@@ -18,7 +18,6 @@
 #include "memory"
 #include "AsyncDelay.h"
 #include "ArduinoJson.h"
-#include "guescio.h"//TEST
 
 //wifi and MQTT
 #if POST or VERBOSE
@@ -51,12 +50,20 @@
 #if POST or VERBOSE
 WiFiHandler wifihandler(WIFISSID,
 			WIFIPASSWORD);
+#if TLS
+char* cacert = CACERT;
+#else
+char* cacert = "";
+#endif //TLS
+
 MQTTHandler mqtthandler(MQTTSERVER,
-			MQTTPORT,
+			TLS? MQTTTLSPORT:MQTTPORT,
+			TLS,
 			MQTTUSERNAME,
 			MQTTPASSWORD,
 			MQTTTOPIC,
-			MQTTMESSAGESIZE);
+			MQTTMESSAGESIZE,
+			cacert);
 #endif //POST or VERBOSE
 
 //******************************************
@@ -137,7 +144,7 @@ void setup() {
   //------------------------------------------
   //initialize sensors
   for (auto&& sensor : sensors) {
-      sensor->init(VERBOSE);
+      sensor->init();
   }
 
   //------------------------------------------
@@ -190,7 +197,7 @@ void loop() {
   //integrate sensor measurements (if averaging is enabled)
   if (integrationTime.isExpired()) {
     for (auto&& sensor : sensors) {
-      sensor->integrate(VERBOSE);
+      sensor->integrate();
     }
     integrationTime.repeat();
   }
@@ -221,7 +228,7 @@ void readPrintPost() {
     //------------------------------------------
     //read measurements
     for (auto&& sensor : sensors) {
-      sensor->readData(VERBOSE);
+      sensor->readData();
     }
     
     //------------------------------------------

@@ -17,8 +17,8 @@ class SHTxxSensor: public virtual TRHSensor {
   public:
     enum model {sht35a, sht35b, sht85};
     SHTxxSensor(model model);
-    int init(bool verbose=false) override;
-    void readData(bool verbose=false) override;
+    int init() override;
+    void readData() override;
 
   //------------------------------------------
   private:

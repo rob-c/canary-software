@@ -26,7 +26,7 @@ SHTxxSensor::SHTxxSensor(model model) {
 
 //******************************************
 //initialize SHTxx sensor
-int SHTxxSensor::init(bool verbose) {
+int SHTxxSensor::init() {
   _sht = Adafruit_SHT31();
   if (not _sht.begin(_address)) {
     Serial.println("SHTxx: begin error");
@@ -37,7 +37,7 @@ int SHTxxSensor::init(bool verbose) {
 
 //******************************************
 //read data from the sensor
-void SHTxxSensor::readData(bool verbose) {
+void SHTxxSensor::readData() {
   _temp = _sht.readTemperature();
   _rh = _sht.readHumidity();
   computeDewPoint();

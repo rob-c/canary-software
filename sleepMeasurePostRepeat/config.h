@@ -13,6 +13,7 @@
 #define PRINTSERIAL (false) //print measurements to serial output
 #define POST (true) //connect and post measurements to MQTT server
 #define VERBOSE (true) //print connection status and posting details
+#define TLS (true) //use TLS encryption; does not work with ESP8266
 //#define ESP8266 //use an ESP8266 microcontroller instead of an ESP32 (default)
 
 //******************************************
@@ -25,6 +26,7 @@
 #define MQTTMESSAGESIZE (1024) //maximum message length [byte]
 //#define MQTTSERVER ("127.0.0.1") //MQTT server address
 //#define MQTTPORT (1883) //MQTT server port
+//#define MQTTTLSPORT (8883) //MQTT with TLS server port
 //#define MQTTUSERNAME ("username") //MQTT username
 //#define MQTTPASSWORD ("password") //MQTT password
 //#define MQTTTOPIC ("topic") //MQTT topic
@@ -55,8 +57,9 @@
 
 //******************************************
 //SPS30 dust particle counter
-#define SPS30
+//#define SPS30
 #define SPS30AVERAGE (true)//average over multiple SPS30 measurements (one per second)
+#define SPS30VERBOSE (false)//print SPS30 information
 
 //******************************************
 //ADS1x15 ADCs and NTCs (4 channels)
@@ -97,3 +100,29 @@
 #define ADS1x153R0 (4.7e3) //NTC R0 [Ohm] //1e4/22e3/4.7e3
 #define ADS1x153T0 (298.15) //NTC T0 [K] //298.15
 #define ADS1x153B (3650) //NTC B //3435/4000/3650
+
+//certification authority's ROOT certificate
+//TrustID X3 Root
+#if TLS
+#define CACERT (						       \
+  "-----BEGIN CERTIFICATE-----\n"				       \
+  "MIIDSjCCAjKgAwIBAgIQRK+wgNajJ7qJMDmGLvhAazANBgkqhkiG9w0BAQUFADA/\n" \
+  "MSQwIgYDVQQKExtEaWdpdGFsIFNpZ25hdHVyZSBUcnVzdCBDby4xFzAVBgNVBAMT\n" \
+  "DkRTVCBSb290IENBIFgzMB4XDTAwMDkzMDIxMTIxOVoXDTIxMDkzMDE0MDExNVow\n" \
+  "PzEkMCIGA1UEChMbRGlnaXRhbCBTaWduYXR1cmUgVHJ1c3QgQ28uMRcwFQYDVQQD\n" \
+  "Ew5EU1QgUm9vdCBDQSBYMzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB\n" \
+  "AN+v6ZdQCINXtMxiZfaQguzH0yxrMMpb7NnDfcdAwRgUi+DoM3ZJKuM/IUmTrE4O\n" \
+  "rz5Iy2Xu/NMhD2XSKtkyj4zl93ewEnu1lcCJo6m67XMuegwGMoOifooUMM0RoOEq\n" \
+  "OLl5CjH9UL2AZd+3UWODyOKIYepLYYHsUmu5ouJLGiifSKOeDNoJjj4XLh7dIN9b\n" \
+  "xiqKqy69cK3FCxolkHRyxXtqqzTWMIn/5WgTe1QLyNau7Fqckh49ZLOMxt+/yUFw\n" \
+  "7BZy1SbsOFU5Q9D8/RhcQPGX69Wam40dutolucbY38EVAjqr2m7xPi71XAicPNaD\n" \
+  "aeQQmxkqtilX4+U9m5/wAl0CAwEAAaNCMEAwDwYDVR0TAQH/BAUwAwEB/zAOBgNV\n" \
+  "HQ8BAf8EBAMCAQYwHQYDVR0OBBYEFMSnsaR7LHH62+FLkHX/xBVghYkQMA0GCSqG\n" \
+  "SIb3DQEBBQUAA4IBAQCjGiybFwBcqR7uKGY3Or+Dxz9LwwmglSBd49lZRNI+DT69\n" \
+  "ikugdB/OEIKcdBodfpga3csTS7MgROSR6cz8faXbauX+5v3gTt23ADq1cEmv8uXr\n" \
+  "AvHRAosZy5Q6XkjEGB5YGV8eAlrwDPGxrancWYaLbumR9YbK+rlmM6pZW87ipxZz\n" \
+  "R8srzJmwN0jP41ZL9c8PDHIyh8bwRLtTcm1D9SZImlJnt1ir/md2cXjbDaJWFBM5\n" \
+  "JDGFoqgCWjBH4d1QB7wCCZAA62RjYJsWvIjJEubSfZGL+T0yjWW06XyxV3bqxbYo\n" \
+  "Ob8VZRzI9neWagqNdwvYkQsEjgfbKbYK7p2CNTUQ\n"                         \
+  "-----END CERTIFICATE-----\n")
+#endif //TLS

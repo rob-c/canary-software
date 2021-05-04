@@ -15,14 +15,14 @@ MAX31865Sensor::MAX31865Sensor(float rnom, float rref, uint8_t cs, TRHSensor* rh
   
 //******************************************
 //initialize MAX31865 sensor
-int MAX31865Sensor::init(bool verbose) {
+int MAX31865Sensor::init() {
   _max31865.begin(MAX31865_2WIRE); //2-wire configuration
   return 0;
 }
 
 //******************************************
 //read data from the sensor
-void MAX31865Sensor::readData(bool verbose) {
+void MAX31865Sensor::readData() {
 
   //------------------------------------------
   //read temperature measurement
