@@ -9,7 +9,7 @@
 //******************************************
 #include "Sensor.h"
 #include "Wire.h"
-#include "Adafruit_ADS1015.h"
+#include "Adafruit_ADS1X15.h"
 #include "vector"
 
 //******************************************
@@ -18,12 +18,11 @@ class ADS1x15Sensor: public virtual Sensor {
   //------------------------------------------
   public:
     ADS1x15Sensor(float vdd, float vref);
-    int init(void) override;
+    int init() override;
     void readData() override;
     String getSensorString(void) override;
     String getMeasurementsString(void) override;
     void getJSONDoc(JsonDocument &doc) override;
-    //float getTNTC(int adc, float adcrdiv, float ntct0, float ntcb, float ntcr0, float vdd, float vref);
     float getTNTC(uint8_t channel);
     void setADCChannel(uint8_t channel, float rdiv, float t0, float b, float r0);
 

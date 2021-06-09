@@ -1,6 +1,6 @@
 /*
  * This sketch measures values from the connected sensors, prints them to serial output and sends them to a server.
- * Both ESP8266 and ESP32 MCUs are supported. Other MCUs may be compatible too.
+ * Both ESP8266 and ESP32 microcontrollers are supported. Other microcontrollers may be compatible too.
  * Printing and posting can be enabled/disabled by uncommenting/commenting the relative options in config.h.
  * To enable/disable a sensor, uncomment/comment its name in config.h.
  * All the available options can be set in config.h.
@@ -17,17 +17,12 @@
 #include "vector"
 #include "memory"
 #include "AsyncDelay.h"
+#include "ArduinoJson.h"
 
 //wifi and MQTT
-#if defined(POST) or defined(VERBOSE)
+#if POST or VERBOSE
 #include "WiFiHandler.h"
 #include "MQTTHandler.h"
-#include "PubSubClient.h"
-#ifdef ESP32
-#include "WiFi.h" //ESP32
-#else
-#include "ESP8266WiFi.h" //ESP8266
-#endif //ESP32
 #endif //POST or VERBOSE
 
 //SHTxx
@@ -51,15 +46,20 @@
 #endif //ADS1015 or ADS1115
 
 //******************************************
-//MQTT
-#if defined(POST) or defined(VERBOSE)
-WiFiClient wificlient;
-PubSubClient mqttclient(wificlient);
-const char* mqttserver = MQTTSERVER;
-const unsigned int mqttport = MQTTPORT;
-const char* mqttusername = MQTTUSERNAME;
-const char* mqttpassword = MQTTPASSWORD;
-const String mqtttopic = MQTTTOPIC;
+//wifi and MQTT setup
+#if POST or VERBOSE
+WiFiHandler wifihandler(WIFISSID,
+			WIFIPASSWORD);
+PubSubClient mqttclient;
+MQTTHandler mqtthandler(&mqttclient,
+			MQTTSERVER,
+			TLS? MQTTTLSPORT:MQTTPORT,
+			TLS,
+			MQTTUSERNAME,
+			MQTTPASSWORD,
+			MQTTTOPIC,
+			MQTTMESSAGESIZE,
+			TLS? CACERT:"");
 #endif //POST or VERBOSE
 
 //******************************************
@@ -88,11 +88,9 @@ void setup() {
   Serial.println("\nsleep, measure, post, repeat\n");
 
   //------------------------------------------
-  //MQTT setup
-#ifdef POST
-  wifiConnect();
-  mqttclient.setServer(mqttserver, mqttport);
-  mqttclient.setBufferSize(MQTTMESSAGESIZE);
+  //wifi connection
+#if POST
+  wifihandler.connect(VERBOSE);
 #endif //POST
 
   //------------------------------------------
@@ -146,7 +144,7 @@ void setup() {
 
   //------------------------------------------
   //print list of sensors
-#if defined(PRINTSERIAL) or defined(VERBOSE)
+#if PRINTSERIAL or VERBOSE
   Serial.println("available sensors:");
   for (auto&& sensor : sensors) {
       Serial.print("\t");
@@ -157,7 +155,7 @@ void setup() {
 
   //------------------------------------------
   //print measurement names and units
-#ifdef PRINTSERIAL
+#if PRINTSERIAL
   for (auto&& sensor : sensors) {
       Serial.print(sensor->getSensorString());
   }
@@ -167,18 +165,18 @@ void setup() {
   //------------------------------------------
   //read, print and post values before going to sleep
   //NOTE this is meant for battery operation (no caffeine)
-#ifndef CAFFEINE
+#if not CAFFEINE
   for (auto&& sensor : sensors) {
     sensor->integrate();
   }
   readPrintPost();
   Serial.println("now going to sleep zzz...");
   ESP.deepSleep(SLEEPTIME * 1e6); //µs
-#endif //CAFFEINE
+#endif //not CAFFEINE
   
   //------------------------------------------
-  //timing
-#ifdef CAFFEINE
+  //start asynchronous timing
+#if CAFFEINE
   MQTTTime.start(MQTTTIME*1e3, AsyncDelay::MILLIS);
   integrationTime.start(INTEGRATIONTIME*1e3, AsyncDelay::MILLIS);
   sleepTime.start(SLEEPTIME*1e3, AsyncDelay::MILLIS);
@@ -208,9 +206,9 @@ void loop() {
 
   //------------------------------------------
   //MQTT check-in loop
-#ifdef POST
+#if POST
   if (MQTTTime.isExpired()) {
-    mqttclient.loop();
+    mqtthandler.loop();
     MQTTTime.repeat();
   }
 #endif //POST
@@ -230,13 +228,14 @@ void readPrintPost() {
     
     //------------------------------------------
     //print measurements
-#ifdef PRINTSERIAL
+#if PRINTSERIAL
     for (auto&& sensor : sensors) {
       Serial.print(sensor->getMeasurementsString());
     }
     Serial.println();
 #endif //PRINTSERIAL
-    
+
+#if POST or VERBOSE
     //------------------------------------------
     //post measurements
     masterdoc.clear();
@@ -246,9 +245,19 @@ void readPrintPost() {
       addMetaData(sensordoc);
       masterdoc.add(sensordoc);
     }
-#if defined(POST) or defined(VERBOSE)
-    postValues(mqttclient, mqttserver, mqttport, mqttusername, mqttpassword, masterdoc, mqtttopic);
+#if POST
+    wifihandler.connect(VERBOSE);
+#endif //POST
+    mqtthandler.post(masterdoc, POST, VERBOSE);
+
+    //------------------------------------------
+    //disconnect before leaving
+#if not CAFFEINE
+    wifihandler.disconnect();
+#endif //not CAFFEINE
 #endif //POST or VERBOSE
+
+
 } //readPrintPost()
 
 //******************************************
@@ -265,10 +274,8 @@ void addMetaData(JsonDocument &doc) {
 #endif //LOCATION
 #ifdef NAME
   doc["name"] = NAME;
-#elif defined(POST) or defined(VERBOSE)
-#ifdef MACASNAME
-  doc["name"] = WiFi.macAddress();
-#endif //MACASNAME
-#endif //NAME or (POST or VERBOSE)
+#elif defined(MACASNAME)
+  doc["name"] = wifihandler.getMACAddress();
+#endif //NAME or MACASNAME
   return;
 }

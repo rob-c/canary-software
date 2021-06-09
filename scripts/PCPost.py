@@ -10,7 +10,7 @@
 #      * * * * * sleep 40; timeout 20 python3 /path/to/PCPost.py -p /dev/ttyUSB0
 #NOTE: the full path to PCPost.py should be specified.
 #NOTE: check the name of the device under /dev/ and pass it as option -p; by default this is assumed to be /dev/ttyUSB0
-# Author: Francesco Guescini.
+#Author: Francesco Guescini.
 
 #******************************************
 #import stuff
@@ -45,7 +45,7 @@ def PCPost(args):
 
             #------------------------------------------
             #read data line
-            data = ser.readline().decode('utf-8', errors='ignore').strip()
+            data = ser.readline().decode("utf-8", errors="ignore").strip()
 
             #------------------------------------------
             #read only
@@ -58,20 +58,20 @@ def PCPost(args):
 
                 #------------------------------------------
                 #extract values
-                if 'message:' in str(data):
-                    payload = str(data).split('message: ')[1].strip()
+                if "message:" in str(data):
+                    payload = str(data).split("message: ")[1].strip()
                     if args.debug: print("payload: %s"%payload)
-                if 'topic:' in str(data):
-                    topic = str(data).split('topic: ')[1].strip()
+                if "topic:" in str(data):
+                    topic = str(data).split("topic: ")[1].strip()
                     if args.debug: print("topic: %s"%topic)
-                if 'server:' in str(data):
-                    hostname = str(data).split('server: ')[1].strip()
+                if "server:" in str(data):
+                    hostname = str(data).split("server: ")[1].strip()
                     if args.debug: print("hostname: %s"%hostname)
-                if 'user:' in str(data):
-                    user = str(data).split('user: ')[1].strip()
+                if "user:" in str(data):
+                    user = str(data).split("user: ")[1].strip()
                     if args.debug: print("user: %s"%user)
-                if 'auth:' in str(data):
-                    word = str(data).split('auth: ')[1].strip()
+                if "auth:" in str(data):
+                    word = str(data).split("auth: ")[1].strip()
                     if args.debug: print("word: %s"%word)
 
                 #------------------------------------------
@@ -109,7 +109,7 @@ def PCPost(args):
                             else:
                                 print("done")
                         except:
-                            print('ERROR posting data ('+datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")+")")
+                            print("ERROR posting data ("+datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")+")")
 
                     #------------------------------------------
                     #exit loop
@@ -121,16 +121,16 @@ def PCPost(args):
             sys.exit(0)
 
 #******************************************
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     #------------------------------------------
     #parse input arguments
-    parser = argparse.ArgumentParser(description='%prog [options]')
-    parser.add_argument('-p', '--port', dest='port', default='/dev/ttyUSB0', help='serial port, usually "/dev/cu.SLAB_USBtoUART" or "/dev/ttyUSB0"')
-    parser.add_argument('-b', '--baudrate', dest='baudrate', default=115200, help='baud rate')
-    parser.add_argument('-r', '--readonly', dest='readonly', action='store_true', default=False, help='read only')
-    parser.add_argument('-q', '--quiet', dest='quiet', action='store_true', default=False, help='read but do not post')
-    parser.add_argument('-d', '--debug', dest='debug', action='store_true', default=False, help='debug mode')
+    parser = argparse.ArgumentParser(description="%prog [options]")
+    parser.add_argument("-p", "--port", dest="port", default="/dev/ttyUSB0", help="serial port, usually "/dev/cu.SLAB_USBtoUART" or "/dev/ttyUSB0"")
+    parser.add_argument("-b", "--baudrate", dest="baudrate", default=115200, help="baud rate")
+    parser.add_argument("-r", "--readonly", dest="readonly", action="store_true", default=False, help="read only")
+    parser.add_argument("-q", "--quiet", dest="quiet", action="store_true", default=False, help="read but do not post")
+    parser.add_argument("-d", "--debug", dest="debug", action="store_true", default=False, help="debug mode")
     args = parser.parse_args()
     
     #------------------------------------------

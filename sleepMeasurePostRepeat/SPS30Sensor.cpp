@@ -2,9 +2,10 @@
 
 //******************************************
 //SPS30 constructor
-SPS30Sensor::SPS30Sensor(bool average) {
+SPS30Sensor::SPS30Sensor(bool average, bool verbose) {
   _name = "SPS30";
   _average = average;
+  _verbose = verbose;
   _integral = 0;
   _counter = 0;
   return;
@@ -12,7 +13,7 @@ SPS30Sensor::SPS30Sensor(bool average) {
 
 //******************************************
 //initialize SPS30 sensor
-int SPS30Sensor::init(void) {
+int SPS30Sensor::init() {
 
   //------------------------------------------
   //initialize I2C communication
@@ -22,9 +23,9 @@ int SPS30Sensor::init(void) {
   //probe SPS30
   for (int ii = 0; ii < 10; ii++) {
     if (sps30_probe() != 0) {
-#ifdef VERBOSE
-      Serial.println("SPS30 sensor probing failed");
-#endif //VERBOSE
+      if (_verbose) {
+	Serial.println("SPS30 sensor probing failed");
+      }
     } else {
       _sps30available = true;
       break;
@@ -35,8 +36,7 @@ int SPS30Sensor::init(void) {
 
   //------------------------------------------
   //SPS30 serial number
-#ifdef VERBOSE
-  if (_sps30available) {
+  if (_sps30available and _verbose) {
     _ret = sps30_get_serial(_serial);
     if (_ret) {
       Serial.println("could not retrieve SPS30 serial number");
@@ -45,17 +45,14 @@ int SPS30Sensor::init(void) {
       Serial.println(_serial);
     }
   }
-#endif //VERBOSE
 
   //------------------------------------------
   //set auto-cleaning
   if (_sps30available) {
     _ret = sps30_set_fan_auto_cleaning_interval_days(_auto_clean_days);
-    if (_ret) {
-#ifdef VERBOSE
+    if (_ret and _verbose) {
       Serial.print("SPS30 error setting the auto-clean interval: ");
       Serial.println(_ret);
-#endif //VERBOSE
     }
   }
 
@@ -63,17 +60,15 @@ int SPS30Sensor::init(void) {
   //start measurement
   if (_sps30available) {
     _ret = sps30_start_measurement();
-    if (_ret < 0) {
-#ifdef VERBOSE
+    if (_ret < 0 and _verbose) {
       Serial.print("SPS30 error starting measurement\n");
-#endif //verbose
       _sps30available = false;
     }
   }
 
   //------------------------------------------
   //I2C buffer size
-#ifdef SPS30_LIMITED_I2C_BUFFER_SIZE
+#if SPS30_LIMITED_I2C_BUFFER_SIZE
   Serial.println("The hardware has a limitation that only");
   Serial.println("  allows reading the SPS30 mass concentrations.");
   Serial.println("  For more information, please check:");
@@ -89,7 +84,7 @@ int SPS30Sensor::init(void) {
 
 //******************************************
 //simply read data from the sensor
-float SPS30Sensor::simplyRead(void) {
+float SPS30Sensor::simplyRead() {
   
   if (!_sps30available) return std::numeric_limits<float>::quiet_NaN();
 
@@ -97,15 +92,11 @@ float SPS30Sensor::simplyRead(void) {
   //check if data from SPS30 is ready
   for (int ii = 0; ii < 10; ii++) {
     _ret = sps30_read_data_ready(&_data_ready);
-    if (_ret < 0) {
-#ifdef VERBOSE
+    if (_ret < 0 and _verbose) {
       Serial.print("SPS30 error reading data-ready flag: ");
       Serial.println(_ret);
-#endif //VERBOSE
-    } else if (!_data_ready) {
-#ifdef VERBOSE
+    } else if (!_data_ready and _verbose) {
       Serial.println("SPS30 data not ready, no new measurement available");
-#endif //VERBOSE
     } else {
       break;
     }
@@ -117,9 +108,9 @@ float SPS30Sensor::simplyRead(void) {
   //read SPS30 measurement
   _ret = sps30_read_measurement(&_m);
   if (_ret < 0) {
-#ifdef VERBOSE
-    Serial.println("SPS30 error reading measurement");
-#endif //VERBOSE
+    if (_verbose) {
+      Serial.println("SPS30 error reading measurement");
+    }
     return std::numeric_limits<float>::quiet_NaN();
   } else {
     return (_m.nc_10p0 - _m.nc_0p5); //particles/cm^3
@@ -128,7 +119,7 @@ float SPS30Sensor::simplyRead(void) {
 
 //******************************************
 //integrate measurements to get an average measurement
-void SPS30Sensor::integrate(void) {
+void SPS30Sensor::integrate() {
   if (_average) {
     float value = simplyRead();
     if (!isnan(value)) {
@@ -150,7 +141,7 @@ void SPS30Sensor::integrate(void) {
 
 //******************************************
 //read data from the sensor
-void SPS30Sensor::readData(void) {
+void SPS30Sensor::readData() {
   if (_average) {
     _dustnc = _integral / _counter;
     _integral = 0;

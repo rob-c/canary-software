@@ -45,7 +45,7 @@ void ADS1x15Sensor::setADCChannel(uint8_t channel, float rdiv, float t0, float b
 
 //******************************************
 //initialize ADS1x15 sensor
-int ADS1x15Sensor::init(void) {
+int ADS1x15Sensor::init() {
 
   //https://github.com/adafruit/Adafruit_ADS1X15/blob/master/examples/singleended/singleended.ino
   
