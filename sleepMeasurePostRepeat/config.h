@@ -18,18 +18,18 @@
 
 //******************************************
 //wifi
-//#define WIFISSID "ssid" //wifi SSID
-//#define WIFIPASSWORD "password" //wifi password
+#define WIFISSID "ssid" //wifi SSID
+#define WIFIPASSWORD "password" //wifi password
 
 //******************************************
 //MQTT
 #define MQTTMESSAGESIZE 1024 //maximum message length [byte]
-//#define MQTTSERVER "127.0.0.1" //MQTT server address
-//#define MQTTPORT 1883 //MQTT server port
-//#define MQTTTLSPORT 8883 //MQTT with TLS server port
-//#define MQTTUSERNAME "username" //MQTT username
-//#define MQTTPASSWORD "password" //MQTT password
-//#define MQTTTOPIC "topic" //MQTT topic
+#define MQTTSERVER "mqqtserver" //MQTT server address
+#define MQTTPORT 1883 //MQTT server port
+#define MQTTTLSPORT 8883 //MQTT with TLS server port
+#define MQTTUSERNAME "username" //MQTT username
+#define MQTTPASSWORD "password" //MQTT password
+#define MQTTTOPIC "topic" //MQTT topic
 //#define INSTITUTE "institute" //institute of the measuring device (optional)
 //#define ROOM "room" //room of the measuring device (optional)
 //#define LOCATION "location" //location of the measuring device (optional)
@@ -57,7 +57,7 @@
 
 //******************************************
 //SPS30 dust particle counter
-//#define SPS30
+#define SPS30 //SPS30
 #define SPS30AVERAGE true //average over multiple SPS30 measurements (one per second)
 #define SPS30VERBOSE false //print SPS30 information
 
@@ -71,39 +71,39 @@
 
 //ADC0/NTC0 (channel 0)
 //#define ADS1x150ADC //NOTE set also the voltage divider resistor value
-#define ADS1x150NTC //NOTE set also the voltage divider resistor value and NTC R0, T0 and B values
+//#define ADS1x150NTC //NOTE set also the voltage divider resistor value and NTC R0, T0 and B values
 #define ADS1x150RDIV 49.9e3 //ADC voltage divider resistor value [Ohm] //49.9e3
-#define ADS1x150R0 4.7e3 //NTC R0 [Ohm] //1e4
+#define ADS1x150R0 1e4 //NTC R0 [Ohm] //1e4
 #define ADS1x150T0 298.15 //NTC T0 [K] //298.15
-#define ADS1x150B 3650 //NTC B //3435
+#define ADS1x150B 3435 //NTC B //3435
 
 //ADC1/NTC1 (channel 1)
 //#define ADS1x151ADC //NOTE set also the voltage divider resistor value
-#define ADS1x151NTC //NOTE set also the voltage divider resistor value and NTC R0, T0 and B values
+//#define ADS1x151NTC //NOTE set also the voltage divider resistor value and NTC R0, T0 and B values
 #define ADS1x151RDIV 49.9e3 //ADC voltage divider resistor value [Ohm] //49.9e3
-#define ADS1x151R0 4.7e3 //NTC R0 [Ohm] //1e4
+#define ADS1x151R0 1e4 //NTC R0 [Ohm] //1e4
 #define ADS1x151T0 298.15 //NTC T0 [K] //298.15
-#define ADS1x151B 3650 //NTC B //3435
+#define ADS1x151B 3435 //NTC B //3435
 
 //ADC2/NTC2 (channel 2)
 //#define ADS1x152ADC //NOTE set also the voltage divider resistor value
-#define ADS1x152NTC //NOTE set also the voltage divider resistor value and NTC R0, T0 and B values
+//#define ADS1x152NTC //NOTE set also the voltage divider resistor value and NTC R0, T0 and B values
 #define ADS1x152RDIV 49.9e3 //ADC voltage divider resistor value [Ohm] //49.9e3
-#define ADS1x152R0 4.7e3 //NTC R0 [Ohm] //1e4
+#define ADS1x152R0 1e4 //NTC R0 [Ohm] //1e4
 #define ADS1x152T0 298.15 //NTC T0 [K] //298.15
-#define ADS1x152B 3650 //NTC B //3435
+#define ADS1x152B 3435 //NTC B //3435
 
 //ADC3/NTC3 (channel 3)
-#define ADS1x153ADC //NOTE set also the voltage divider resistor value
-#define ADS1x153NTC //NOTE set also the voltage divider resistor value and NTC R0, T0 and B values
+//#define ADS1x153ADC //NOTE set also the voltage divider resistor value
+//#define ADS1x153NTC //NOTE set also the voltage divider resistor value and NTC R0, T0 and B values
 #define ADS1x153RDIV 49.9e3 //ADC voltage divider resistor value [Ohm] //49.9e3
-#define ADS1x153R0 4.7e3 //NTC R0 [Ohm] //1e4/22e3/4.7e3
+#define ADS1x153R0 1e4 //NTC R0 [Ohm] //1e4
 #define ADS1x153T0 298.15 //NTC T0 [K] //298.15
-#define ADS1x153B 3650 //NTC B //3435/4000/3650
+#define ADS1x153B 3435 //NTC B //3435
 
 //certification authority's ROOT certificate
 //TrustID X3 Root
-#define CACERT						       \
+#define CACERT						               \
   "-----BEGIN CERTIFICATE-----\n"				       \
   "MIIDSjCCAjKgAwIBAgIQRK+wgNajJ7qJMDmGLvhAazANBgkqhkiG9w0BAQUFADA/\n" \
   "MSQwIgYDVQQKExtEaWdpdGFsIFNpZ25hdHVyZSBUcnVzdCBDby4xFzAVBgNVBAMT\n" \

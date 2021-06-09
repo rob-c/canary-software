@@ -245,7 +245,9 @@ void readPrintPost() {
       addMetaData(sensordoc);
       masterdoc.add(sensordoc);
     }
+#if POST
     wifihandler.connect(VERBOSE);
+#endif //POST
     mqtthandler.post(masterdoc, POST, VERBOSE);
 
     //------------------------------------------
