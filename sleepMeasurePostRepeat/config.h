@@ -8,10 +8,10 @@
 //******************************************
 //setup
 #define CAFFEINE true //do not go to sleep; use if not battery operated
-#define SLEEPTIME 60 //sleep interval [s]
+#define SLEEPTIME 10 //sleep interval [s]
 #define INTEGRATIONTIME 1 //measurements integration time interval [s]
 #define PRINTSERIAL false //print measurements to serial output
-#define POST true //connect and post measurements to MQTT server
+#define POST false //connect and post measurements to MQTT server
 #define VERBOSE true //print connection status and posting details
 #define TLS true //use TLS encryption; does not work with ESP8266
 //#define ESP8266 //use an ESP8266 microcontroller instead of an ESP32 (default)
@@ -39,13 +39,13 @@
 
 //******************************************
 //SHT temperature and humidity sensors
-//#define SHT35A //SHT35 A (0x44 address)
-#define SHT35B //SHT35 B (0x45 address)
-//#define SHT85 //SHT85 (0x44 address)
+//#define SHT35A //enable SHT35 A (0x44 address)
+#define SHT35B //enable SHT35 B (0x45 address)
+//#define SHT85 //enable SHT85 (0x44 address)
 
 //******************************************
 //MAX31865 RTD sensor
-//#define MAX31865 //MAX31865
+//#define MAX31865 //enable MAX31865
 #define MAX31865RNOM 1000 //sensor nominal resistance at 0 C (100 Ohm or 1000 Ohm) [Ohm]
 #define MAX31865RREF 4020 //reference resistor [Ohm]
 #ifdef ESP8266 //ESP8266
@@ -57,14 +57,14 @@
 
 //******************************************
 //SPS30 dust particle counter
-#define SPS30 //SPS30
+#define SPS30 //enable SPS30
 #define SPS30AVERAGE true //average over multiple SPS30 measurements (one per second)
 #define SPS30VERBOSE false //print SPS30 information
 
 //******************************************
 //ADS1x15 ADCs and NTCs (4 channels)
-//#define ADS1015 //ADS1015 (12 bit)
-//#define ADS1115 //ADS1115 (16 bit)
+//#define ADS1015 //enable ADS1015 (12 bit)
+//#define ADS1115 //enable ADS1115 (16 bit)
 #define ADS1x15VDD 3.3 //VDD [V]
 #define ADS1x15VREF 4.096 //ADC reference voltage [V] //NOTE valid for ADC gain set to 1, see ADS1x15GAIN
 #define ADS1x15GAIN GAIN_ONE //ADC gain: 1x gain  +/- 4.096V  1 bit = 2mV (ADS1015) or 0.125mV (ADS1115), see ADS1x15VREF

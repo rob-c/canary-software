@@ -11,6 +11,10 @@
 */
 
 //******************************************
+//definitions
+#define VERSION "v. 1.0.0"
+
+//******************************************
 //libraries
 #include "config.h"
 #include "sensor.h"
@@ -85,7 +89,9 @@ void setup() {
   //serial begin
   Serial.begin(115200);
   while (!Serial) {}
-  Serial.println("\nsleep, measure, post, repeat\n");
+  Serial.println("\nsleep, measure, post, repeat");
+  Serial.println(VERSION);
+  Serial.println();
 
   //------------------------------------------
   //wifi connection
