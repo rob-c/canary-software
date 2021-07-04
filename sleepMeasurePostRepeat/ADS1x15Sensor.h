@@ -11,6 +11,7 @@
 #include "Wire.h"
 #include "Adafruit_ADS1X15.h"
 #include "vector"
+#include "config.h"
 
 //******************************************
 class ADS1x15Sensor: public virtual Sensor {

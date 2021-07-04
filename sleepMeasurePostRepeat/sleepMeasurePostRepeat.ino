@@ -132,7 +132,7 @@ void setup() {
 
   //SPS30
 #ifdef SPS30
-  SPS30Sensor* sps30 = new SPS30Sensor(SPS30AVERAGE);
+  SPS30Sensor* sps30 = new SPS30Sensor(SPS30AVERAGE, SPS30VERBOSE);
   sensors.emplace_back(sps30);
 #endif //SPS30
 
