@@ -7,7 +7,7 @@
 #define ADS1X15SENSOR
 
 //******************************************
-#include "Sensor.h"
+#include "sensor.h"
 #include "Wire.h"
 #include "Adafruit_ADS1X15.h"
 #include "vector"
