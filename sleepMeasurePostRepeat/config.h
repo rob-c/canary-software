@@ -13,7 +13,7 @@
 #define PRINTSERIAL false //print measurements to serial output
 #define POST false //connect and post measurements to MQTT server
 #define VERBOSE true //print connection status and posting details
-#define TLS true //use TLS encryption; does not work with ESP8266
+#define TLS false //use TLS encryption; does not work with ESP8266
 //#define ESP8266 //use an ESP8266 microcontroller instead of an ESP32 (default)
 
 //******************************************
