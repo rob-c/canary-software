@@ -28,7 +28,7 @@ class MQTTHandler {
 		char* password,
 		char* topic,
 		unsigned int messagesize,
-		char* cacert="");
+		const char* cacert="");
     void init();
     void setClient(PubSubClient* mqttclient) {_mqttclient = mqttclient; return;}
     int status(bool verbose=false);

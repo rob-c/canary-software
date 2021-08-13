@@ -10,7 +10,7 @@ MQTTHandler::MQTTHandler(PubSubClient* mqttclient,
 			 char* password,
 			 char* topic,
 			 unsigned int messagesize,
-			 char* cacert) {
+			 const char* cacert) {
 
   //------------------------------------------
   //MQTT handler setup
