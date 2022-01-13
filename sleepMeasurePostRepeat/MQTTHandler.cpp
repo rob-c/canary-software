@@ -75,8 +75,8 @@ bool MQTTHandler::connect(bool verbose) {
   }
 
   //------------------------------------------
-  //try connecting for 10 times with 1 s intervals
-  for (int ii = 0; ii < 10; ii++) {
+  //try connecting for 4 times with 5 s intervals
+  for (int ii = 0; ii < 4; ii++) {
 
     //------------------------------------------
     //generate random client ID
@@ -113,7 +113,7 @@ bool MQTTHandler::connect(bool verbose) {
 
     //------------------------------------------
     //delay between trials
-    delay(1000);//ms
+    delay(5000);//ms
   }//END connecting loop
 
   //------------------------------------------
