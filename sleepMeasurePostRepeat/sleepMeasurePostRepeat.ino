@@ -58,7 +58,7 @@
 //network and MQTT setup
 #if POST or VERBOSE
 #ifdef ETHERNET //ethernet
-EthernetHandler networkhandler();
+EthernetHandler networkhandler;
 #else //wifi
 WiFiHandler networkhandler(WIFISSID,
 			   WIFIPASSWORD);
@@ -262,9 +262,10 @@ void readPrintPost() {
       masterdoc.add(sensordoc);
     }
 #if POST
-    networkhandler.connect(VERBOSE);
-#endif //POST
+    mqtthandler.post(masterdoc, networkhandler.connect(VERBOSE), VERBOSE);
+#else
     mqtthandler.post(masterdoc, POST, VERBOSE);
+#endif //POST
 
     //------------------------------------------
     //disconnect before leaving

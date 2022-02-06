@@ -10,7 +10,7 @@ WiFiHandler::WiFiHandler(char* ssid,
 }
 
 //******************************************
-//connect wifi
+//get wifi status
 int WiFiHandler::status(bool verbose) {
 
   int status = WiFi.status();

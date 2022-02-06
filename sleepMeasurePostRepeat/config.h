@@ -11,16 +11,25 @@
 #define SLEEPTIME 10 //sleep interval [s]
 #define INTEGRATIONTIME 1 //measurements integration time interval [s]
 #define PRINTSERIAL false //print measurements to serial output
-#define POST false //connect and post measurements to MQTT server
+#define POST true //connect and post measurements to MQTT server
 #define VERBOSE true //print connection status and posting details
 #define TLS false //use TLS encryption; does not work with ESP8266
 //#define ESP8266 //use an ESP8266 microcontroller instead of an ESP32
 
 //******************************************
 //network
-//#define ETHERNET //use ethernet connection instead of wifi
+#define ETHERNET //use ethernet connection instead of wifi
 
-//wifi
+//ethernet settings
+//wESP32 revision 7+ uses RTL8201
+//https://wesp32.com/software/#arduino-esp32
+#define ETHERNETPHYADDR 0
+#define ETHERNETPHYPOWER -1
+#define ETHERNETPHYMDC 16
+#define ETHERNETPHYMDIO 17
+#define ETHERNETPHYTYPE ETH_PHY_RTL8201
+
+//wifi settings
 #define WIFISSID "ssid" //wifi SSID
 #define WIFIPASSWORD "password" //wifi password
 
@@ -43,7 +52,7 @@
 //******************************************
 //SHT temperature and humidity sensors
 //#define SHT35A //enable SHT35 A (0x44 address)
-#define SHT35B //enable SHT35 B (0x45 address)
+//#define SHT35B //enable SHT35 B (0x45 address)
 //#define SHT85 //enable SHT85 (0x44 address)
 
 //******************************************
