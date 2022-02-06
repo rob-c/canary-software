@@ -3,7 +3,7 @@
 //******************************************
 //ADS1x15 constructor
 ADS1x15Sensor::ADS1x15Sensor(float vdd, float vref):
-  _adc (4, std::numeric_limits<float>::quiet_NaN()),
+  _adc (4, std::numeric_limits<uint16_t>::quiet_NaN()),
   _tntc (4, std::numeric_limits<float>::quiet_NaN()),
   _rdiv (4, std::numeric_limits<float>::quiet_NaN()),
   _t0 (4, std::numeric_limits<float>::quiet_NaN()),
@@ -227,7 +227,12 @@ void ADS1x15Sensor::getJSONDoc(JsonDocument &doc) {
   else doc["ADC0"] = "\"NaN\"";
 #endif //ADS1x150ADC
 #ifdef ADS1x150NTC
-  if ( ! isnan(_tntc[0])) doc["NTC0"] = _tntc[0];
+#ifdef ADS1x150NTCTHRESHOLD
+  if ( ! isnan(_tntc[0]) && _tntc[0] > ADS1x150NTCTHRESHOLD)
+#else
+  if ( ! isnan(_tntc[0]))
+#endif //ADS1x150NTCTHRESHOLD
+    doc["NTC0"] = _tntc[0];
   else doc["NTC0"] = "\"NaN\"";
 #endif //ADS1x150NTC
 
@@ -238,7 +243,12 @@ void ADS1x15Sensor::getJSONDoc(JsonDocument &doc) {
   else doc["ADC1"] = "\"NaN\"";
 #endif //ADS1x151ADC
 #ifdef ADS1x151NTC
-  if ( ! isnan(_tntc[1])) doc["NTC1"] = _tntc[1];
+#ifdef ADS1x151NTCTHRESHOLD
+  if ( ! isnan(_tntc[1]) && _tntc[1] > ADS1x151NTCTHRESHOLD)
+#else
+  if ( ! isnan(_tntc[1]))
+#endif //ADS1x151NTCTHRESHOLD
+    doc["NTC1"] = _tntc[1];
   else doc["NTC1"] = "\"NaN\"";
 #endif //ADS1x151NTC
 
@@ -249,18 +259,28 @@ void ADS1x15Sensor::getJSONDoc(JsonDocument &doc) {
   else doc["ADC2"] = "\"NaN\"";
 #endif //ADS1x152ADC
 #ifdef ADS1x152NTC
-  if ( ! isnan(_tntc[2])) doc["NTC2"] = _tntc[2];
+#ifdef ADS1x152NTCTHRESHOLD
+  if ( ! isnan(_tntc[2]) && _tntc[2] > ADS1x152NTCTHRESHOLD)
+#else
+  if ( ! isnan(_tntc[2]))
+#endif //ADS1x152NTCTHRESHOLD
+    doc["NTC2"] = _tntc[2];
   else doc["NTC2"] = "\"NaN\"";
 #endif //ADS1x152NTC
 
   //------------------------------------------
   //channel 3
-#ifdef ADS1x150ADC
+#ifdef ADS1x153ADC
   if ( ! isnan(_adc[3])) doc["ADC3"] = _adc[3];
   else doc["ADC3"] = "\"NaN\"";
 #endif //ADS1x153ADC
 #ifdef ADS1x153NTC
-  if ( ! isnan(_tntc[3])) doc["NTC3"] = _tntc[3];
+#ifdef ADS1x153NTCTHRESHOLD
+  if ( ! isnan(_tntc[3]) && _tntc[3] > ADS1x153NTCTHRESHOLD)
+#else
+  if ( ! isnan(_tntc[3]))
+#endif //ADS1x153NTCTHRESHOLD
+    doc["NTC3"] = _tntc[3];
   else doc["NTC3"] = "\"NaN\"";
 #endif //ADS1x153NTC
 

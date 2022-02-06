@@ -76,6 +76,7 @@
 #define ADS1x150R0 1e4 //NTC R0 [Ohm] //1e4
 #define ADS1x150T0 298.15 //NTC T0 [K] //298.15
 #define ADS1x150B 3435 //NTC B //3435
+#define ADS1x150NTCTHRESHOLD -75 //NTC lower threshold to accept any temperature as valid [C]
 
 //ADC1/NTC1 (channel 1)
 //#define ADS1x151ADC //NOTE set also the voltage divider resistor value
@@ -84,6 +85,7 @@
 #define ADS1x151R0 1e4 //NTC R0 [Ohm] //1e4
 #define ADS1x151T0 298.15 //NTC T0 [K] //298.15
 #define ADS1x151B 3435 //NTC B //3435
+#define ADS1x151NTCTHRESHOLD -75 //NTC lower threshold to accept any temperature as valid [C]
 
 //ADC2/NTC2 (channel 2)
 //#define ADS1x152ADC //NOTE set also the voltage divider resistor value
@@ -92,6 +94,7 @@
 #define ADS1x152R0 1e4 //NTC R0 [Ohm] //1e4
 #define ADS1x152T0 298.15 //NTC T0 [K] //298.15
 #define ADS1x152B 3435 //NTC B //3435
+#define ADS1x152NTCTHRESHOLD -75 //NTC lower threshold to accept any temperature as valid [C]
 
 //ADC3/NTC3 (channel 3)
 //#define ADS1x153ADC //NOTE set also the voltage divider resistor value
@@ -100,7 +103,9 @@
 #define ADS1x153R0 1e4 //NTC R0 [Ohm] //1e4
 #define ADS1x153T0 298.15 //NTC T0 [K] //298.15
 #define ADS1x153B 3435 //NTC B //3435
+#define ADS1x153NTCTHRESHOLD -75 //NTC lower threshold to accept any temperature as valid [C]
 
+//******************************************
 //certification authority's ROOT certificate
 //TrustID X3 Root
 #define CACERT						               \
