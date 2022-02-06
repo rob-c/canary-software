@@ -14,7 +14,7 @@ WiFiHandler::WiFiHandler(char* ssid,
 int WiFiHandler::status(bool verbose) {
 
   int status = WiFi.status();
-    
+  
   if (verbose) {
     Serial.print("status: ");
     switch (status) {

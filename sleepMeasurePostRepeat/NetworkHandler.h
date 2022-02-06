@@ -1,0 +1,23 @@
+/*
+ * Generic network handling class.
+ * Wifi and Ethernet handling classes inherit from this class.
+ */
+ 
+#ifndef NETWORKHANDLER
+#define NETWORKHANDLER
+
+//******************************************
+#include "WString.h"
+
+//******************************************
+class NetworkHandler {
+
+  //------------------------------------------
+  public:
+    NetworkHandler(){};
+    virtual bool connect(bool verbose=false) {return false;}
+    virtual String getMACAddress(void) {return "";}
+    virtual void disconnect(void) {return;}
+    
+};
+#endif //NETWORKHANDLER

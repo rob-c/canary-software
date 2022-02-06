@@ -15,7 +15,7 @@ class SPS30Sensor: public virtual Sensor {
 
   //------------------------------------------
   public:
-  SPS30Sensor(bool average=false, bool verbose=false);
+    SPS30Sensor(bool average=false, bool verbose=false);
     int init() override;
     float simplyRead();
     void readData() override;
