@@ -106,6 +106,35 @@
 #define ADS1x153NTCTHRESHOLD -75 //NTC lower threshold to accept any temperature as valid [C]
 
 //******************************************
+//ESP8266/ESP32 ADCs and NTCs
+//NOTE ESP8266 has only one ADC channel (A0)
+//NOTE ESP32 has multiple ADC channels (with some conditions) (A2, A3, A4, A7 and A9)
+//NOTE here one channel is considered but additional channels can be added
+//#define ESPxADC //enable ESP8266/ESP32 ADC(s)
+#define ESPxADCVDD 3.3 //VDD [V]
+#define ESPxADCNREADINGS 10 //number of ADC readings to average
+#ifdef ESP8266 //ESP8266
+#define ESPxADCVREF 1.0 //ADC reference voltage [V]
+#else //ESP32
+#define ESPxADCVREF 1.1//ADC reference voltage [V] //NOTE for 0 dB attenuation (0 - 1.1 V input range)
+#define ESPxADCATTENUATION ADC_0db //ADC input attenuation: 0 dB gives no attenuation
+#endif //ESP8266 or ESP32
+
+//ADC0/NTC0 (channel 0)
+#define ESPxADC0ADC true //NOTE set also the voltage divider resistor value
+#define ESPxADC0NTC true //NOTE set also the voltage divider resistor value and NTC R0, T0 and B values
+#define ESPxADC0RDIV 84.5e3 //ADC voltage divider resistor value [Ohm] //84.5e3
+#define ESPxADC0R0 1e4 //NTC R0 [Ohm] //1e4
+#define ESPxADC0T0 298.15 //NTC T0 [K] //298.15
+#define ESPxADC0B 3435 //NTC B //3435
+#define ESPxADC0NTCTHRESHOLD -75 //NTC lower threshold to accept any temperature as valid [C]
+#ifdef ESP8266 //ESP8266
+#define ESPxADC0PIN A0 //ADC channel 0 pin //only A0
+#else //ESP32
+#define ESPxADC0PIN A2 //ADC channel 0 pin //A2, A3, A4, A7 or A9
+#endif //ESP8266 or ESP32
+
+//******************************************
 //certification authority's ROOT certificate
 //TrustID X3 Root
 #define CACERT						               \

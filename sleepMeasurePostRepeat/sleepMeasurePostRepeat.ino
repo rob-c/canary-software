@@ -49,6 +49,11 @@
 #include "ADS1x15Sensor.h"
 #endif //ADS1015 or ADS1115
 
+//ESPx ADC
+#ifdef ESPxADC
+#include "ESPxADCSensor.h"
+#endif //ESPx ADC
+
 //******************************************
 //wifi and MQTT setup
 #if POST or VERBOSE
@@ -102,24 +107,28 @@ void setup() {
   //------------------------------------------
   //add sensors to the vector
 
+  //------------------------------------------
   //SHT35A
 #ifdef SHT35A
   SHTxxSensor* sht35a = new SHTxxSensor(SHTxxSensor::sht35a);
   sensors.emplace_back(sht35a);
 #endif //SHT35A
 
+  //------------------------------------------
   //SHT35B
 #ifdef SHT35B
   SHTxxSensor* sht35b = new SHTxxSensor(SHTxxSensor::sht35b);
   sensors.emplace_back(sht35b);
 #endif //SHT35B
 
+  //------------------------------------------
   //SHT85
 #ifdef SHT85
   SHTxxSensor* sht85 = new SHTxxSensor(SHTxxSensor::sht85);
   sensors.emplace_back(sht85);
 #endif //SHT85
 
+  //------------------------------------------
   //MAX31865
 #ifdef MAX31865
   MAX31865Sensor* max31865 = new MAX31865Sensor(MAX31865RNOM, MAX31865RREF, MAX31865CS);
@@ -129,12 +138,14 @@ void setup() {
 #endif //MAX31865RHSOURCE
 #endif //MAX31865
 
+  //------------------------------------------
   //SPS30
 #ifdef SPS30
   SPS30Sensor* sps30 = new SPS30Sensor(SPS30AVERAGE, SPS30VERBOSE);
   sensors.emplace_back(sps30);
 #endif //SPS30
 
+  //------------------------------------------
   //ADS1015 or ADS1115
 #if defined(ADS1015)
   ADS1x15Sensor<Adafruit_ADS1015, 12>* ads1x15 = new ADS1x15Sensor<Adafruit_ADS1015, 12>("ADS1015", ADS1x15VDD, ADS1x15VREF, ADS1x15GAIN);
@@ -174,7 +185,29 @@ void setup() {
 #endif //ADS1x153ADC or ADS1x153NTC
 
 #endif //ADS1015 or ADS1115
-    
+  
+  //------------------------------------------
+  //ESP8266 or ESP32 ADC
+#ifdef ESPxADC
+
+#ifdef ESP8266
+  ESPxADCSensor<10, 1>* espxadc = new ESPxADCSensor<10, 1>("ESP8266ADC", ESPxADCVDD, ESPxADCVREF, ESPxADCNREADINGS);
+#else //ESP32
+  ESPxADCSensor<12, 1>* espxadc = new ESPxADCSensor<12, 1>("ESP32ADC", ESPxADCVDD, ESPxADCVREF, ESPxADCNREADINGS);
+  espxadc->setAttenuation(ESPxADCATTENUATION);
+#endif //ESP8266 or ESP32
+
+  sensors.emplace_back(espxadc);
+
+#if ESPxADC0ADC or ESPxADC0NTC
+  espxadc->setADCChannel(0, ESPxADC0PIN, ESPxADC0ADC, ESPxADC0NTC, ESPxADC0RDIV, ESPxADC0T0, ESPxADC0B, ESPxADC0R0);
+#ifdef ESPxADC0NTCTHRESHOLD
+  espxadc->setNTCThreshold(0, ESPxADC0NTCTHRESHOLD);
+#endif //ESPxADC0NTCTHRESHOLD
+#endif //ESPxADC0ADC or ESPxADC0NTC
+
+#endif //ESPxADC
+  
   //------------------------------------------
   //initialize sensors
   for (auto&& sensor : sensors) {
