@@ -28,13 +28,11 @@ class ADS1x15Sensor: public virtual Sensor {
     float getTNTC(uint8_t channel);
     void setADCChannel(uint8_t channel, bool adc, bool ntc, float rdiv, float t0, float b, float r0);
     void setNTCThreshold(uint8_t channel, float threshold = std::numeric_limits<float>::quiet_NaN());
-    String getName(void) override {return _name;}
     
   //------------------------------------------
   private:
     T _ads1x15;
     uint8_t nbits = N-1;//NOTE n-1 ADC bits since one bit is for the sign
-    String _name = "ADS1x15";//ADS1x15 name
     float _vdd = std::numeric_limits<float>::quiet_NaN();//VDD [V]
     float _vref = std::numeric_limits<float>::quiet_NaN();//VREF [V]
     adsGain_t _gain;//ADS1x15 gain
