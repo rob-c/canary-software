@@ -70,17 +70,17 @@
 #define ADS1x15GAIN GAIN_ONE //ADC gain: 1x gain  +/- 4.096V  1 bit = 2mV (ADS1015) or 0.125mV (ADS1115), see ADS1x15VREF
 
 //ADC0/NTC0 (channel 0)
-//#define ADS1x150ADC //NOTE set also the voltage divider resistor value
-//#define ADS1x150NTC //NOTE set also the voltage divider resistor value and NTC R0, T0 and B values
+#define ADS1x150ADC false //NOTE set also the voltage divider resistor value
+#define ADS1x150NTC false //NOTE set also the voltage divider resistor value and NTC R0, T0 and B values
 #define ADS1x150RDIV 49.9e3 //ADC voltage divider resistor value [Ohm] //49.9e3
-#define ADS1x150R0 1e4 //NTC R0 [Ohm] //1e4
+#define ADS1x150R0 22e3 //NTC R0 [Ohm] //1e4
 #define ADS1x150T0 298.15 //NTC T0 [K] //298.15
-#define ADS1x150B 3435 //NTC B //3435
+#define ADS1x150B 4000 //NTC B //3435
 #define ADS1x150NTCTHRESHOLD -75 //NTC lower threshold to accept any temperature as valid [C]
 
 //ADC1/NTC1 (channel 1)
-//#define ADS1x151ADC //NOTE set also the voltage divider resistor value
-//#define ADS1x151NTC //NOTE set also the voltage divider resistor value and NTC R0, T0 and B values
+#define ADS1x151ADC false //NOTE set also the voltage divider resistor value
+#define ADS1x151NTC false //NOTE set also the voltage divider resistor value and NTC R0, T0 and B values
 #define ADS1x151RDIV 49.9e3 //ADC voltage divider resistor value [Ohm] //49.9e3
 #define ADS1x151R0 1e4 //NTC R0 [Ohm] //1e4
 #define ADS1x151T0 298.15 //NTC T0 [K] //298.15
@@ -88,8 +88,8 @@
 #define ADS1x151NTCTHRESHOLD -75 //NTC lower threshold to accept any temperature as valid [C]
 
 //ADC2/NTC2 (channel 2)
-//#define ADS1x152ADC //NOTE set also the voltage divider resistor value
-//#define ADS1x152NTC //NOTE set also the voltage divider resistor value and NTC R0, T0 and B values
+#define ADS1x152ADC false //NOTE set also the voltage divider resistor value
+#define ADS1x152NTC false //NOTE set also the voltage divider resistor value and NTC R0, T0 and B values
 #define ADS1x152RDIV 49.9e3 //ADC voltage divider resistor value [Ohm] //49.9e3
 #define ADS1x152R0 1e4 //NTC R0 [Ohm] //1e4
 #define ADS1x152T0 298.15 //NTC T0 [K] //298.15
@@ -97,8 +97,8 @@
 #define ADS1x152NTCTHRESHOLD -75 //NTC lower threshold to accept any temperature as valid [C]
 
 //ADC3/NTC3 (channel 3)
-//#define ADS1x153ADC //NOTE set also the voltage divider resistor value
-//#define ADS1x153NTC //NOTE set also the voltage divider resistor value and NTC R0, T0 and B values
+#define ADS1x153ADC false //NOTE set also the voltage divider resistor value
+#define ADS1x153NTC false //NOTE set also the voltage divider resistor value and NTC R0, T0 and B values
 #define ADS1x153RDIV 49.9e3 //ADC voltage divider resistor value [Ohm] //49.9e3
 #define ADS1x153R0 1e4 //NTC R0 [Ohm] //1e4
 #define ADS1x153T0 298.15 //NTC T0 [K] //298.15

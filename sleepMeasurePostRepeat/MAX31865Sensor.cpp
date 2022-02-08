@@ -2,17 +2,23 @@
 
 //******************************************
 //MAX31865 constructor
-MAX31865Sensor::MAX31865Sensor(float rnom, float rref, uint8_t cs, TRHSensor* rhsource):
+MAX31865Sensor::MAX31865Sensor(float rnom, float rref, uint8_t cs):
   _max31865(Adafruit_MAX31865(cs))
   {
   _name = "MAX31865";
   _rnom = rnom;
   _rref = rref;
   _cs = cs;
+  return;
+}
+
+//******************************************
+//set RH source
+void MAX31865Sensor::setRHSource(TRHSensor* rhsource) {
   _rhsource = rhsource;
   return;
 }
-  
+
 //******************************************
 //initialize MAX31865 sensor
 int MAX31865Sensor::init() {
