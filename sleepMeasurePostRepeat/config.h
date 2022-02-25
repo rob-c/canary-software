@@ -33,7 +33,13 @@
 
 //wifi settings
 #define WIFISSID "ssid" //wifi SSID
+#define WIFIUSER "username" //wifi username
 #define WIFIPASSWORD "password" //wifi password
+#define ENT_WIFI_V1 false //fall back to using V1 of the wifi stack (esp32 <= v1.0.6 board from espressif)
+#define WIFIENTENABLE true //use enetrprise login details over username/password
+#define WIFIENTID "@site.tld" //wifi enterprise ID
+#define WIFIENTUSER "entuser@site.tld" //wifi enterprise username
+#define WIFIENDPASS "entpassword" //wifi enterprise username
 
 //******************************************
 //MQTT

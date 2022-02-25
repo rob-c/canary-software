@@ -1,12 +1,30 @@
 #include "WiFiHandler.h"
+//#include <esp_wifi.h>
+#include <esp_wpa2.h>
+//#include <WiFi.h>
 
 //******************************************
 //wifi handler constructor
-WiFiHandler::WiFiHandler(char* ssid,
-			 char* password) {
+WiFiHandler::WiFiHandler(const char* ssid,
+			 const char* password) {
+  _use_eap = false;
   _ssid = ssid;
   _password = password;
   return;
+}
+
+//****
+// Eduroam/Enterprise constructor
+WiFiHandler::WiFiHandler(const char* ssid,
+    const char* eap_identity,
+    const char* eap_username,
+    const char* eap_password) {
+  _use_eap = true;
+  _ssid = ssid;
+  _eap_identity = eap_identity;
+  _eap_username = eap_username;
+  _eap_password = eap_password;
+  return;      
 }
 
 //******************************************
@@ -48,8 +66,9 @@ int WiFiHandler::status(bool verbose) {
   return status;
 }
 
+
 //******************************************
-//connect wifi
+//connect to wifi with correct method - just a wrapper
 bool WiFiHandler::connect(bool verbose) {
 
   //------------------------------------------
@@ -61,6 +80,80 @@ bool WiFiHandler::connect(bool verbose) {
     }
     return true;
   }
+
+  // start disconnected
+  WiFi.disconnect(true, true);
+
+  if (_use_eap) { return eap_connect(verbose); }
+  else { return basic_connect(verbose); }
+}
+
+//******************************************
+//connect eap enabled wifi i.e. eduroam
+bool WiFiHandler::eap_connect(bool verbose) {
+
+  Serial.printf("MAC >> '%s'\n", WiFi.macAddress());
+  Serial.printf("Connecting to WiFi: '%s' \n", _ssid);
+
+  WiFi.mode(WIFI_STA); //init wifi mode
+
+  Serial.print("identity >> ");
+  Serial.println(_eap_identity);
+  if( esp_wifi_sta_wpa2_ent_set_identity((uint8_t *)_eap_identity, strlen(_eap_identity)) ){
+    Serial.println("Failed to set WPA2 Identity");
+    return false;
+  }
+  Serial.print("user >> ");
+  Serial.println(_eap_username);
+  if( esp_wifi_sta_wpa2_ent_set_username((uint8_t *)_eap_username, strlen(_eap_username)) ){
+    Serial.println("Failed to set WPA2 Username");
+    return false;
+  }
+  Serial.print("pass >> ");
+  Serial.println(_eap_password);
+  if( esp_wifi_sta_wpa2_ent_set_password((uint8_t *)_eap_password, strlen(_eap_password)) ){
+    Serial.println("Failed to set WPA2 Password");
+    return false;
+  }
+
+#ifdef ENT_WIFI_V1
+  bool err = esp_wifi_sta_wpa2_ent_enable();
+#else
+  esp_wpa2_config_t wpa2_config = WPA2_CONFIG_INIT_DEFAULT();
+  bool err = esp_wifi_sta_wpa2_ent_enable(&wpa2_config);
+#endif
+
+  if( !err ){
+    Serial.println("Failed to set WPA2 Enterprise config");
+    return false;
+  }
+
+  short counter=0;
+  WiFi.setAutoReconnect(true);
+  WiFi.begin(_ssid, NULL, 0 , NULL, true);
+  WiFi.setTxPower(WIFI_POWER_2dBm);
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    delay(500);
+    Serial.print(F("."));
+    counter++;
+    if (counter >= 60)
+    { //after 30 seconds timeout - reset board
+      ESP.restart();
+    }
+  }
+
+  Serial.println("");
+  Serial.println(F("WiFi is connected!"));
+  Serial.println(F("IP address set: "));
+  Serial.println(WiFi.localIP()); //print LAN IP
+
+  return true;
+}
+
+//******************************************
+//connect wifi
+bool WiFiHandler::basic_connect(bool verbose) {
 
   //------------------------------------------
   //wifi disconnect
