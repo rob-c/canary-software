@@ -3,12 +3,12 @@
 //******************************************
 //MQTT handler constructor
 MQTTHandler::MQTTHandler(PubSubClient* mqttclient,
-			 char* server,
+			 const char* server,
 			 unsigned int port,
 			 bool tls,
-			 char* username,
-			 char* password,
-			 char* topic,
+			 const char* username,
+			 const char* password,
+			 const char* topic,
 			 unsigned int messagesize,
 			 const char* cacert) {
 

@@ -21,12 +21,12 @@ class MQTTHandler {
   //------------------------------------------
   public:
     MQTTHandler(PubSubClient* mqttclient,
-		char* server,
+		const char* server,
 		unsigned int port,
 		bool tls,
-		char* username,
-		char* password,
-		char* topic,
+		const char* username,
+		const char* password,
+		const char* topic,
 		unsigned int messagesize,
 		const char* cacert="");
     void init();
@@ -40,12 +40,12 @@ class MQTTHandler {
     
   //------------------------------------------
   private:
-    char* _server;
+    const char* _server;
     unsigned int _port;
     bool _tls;
-    char* _username;
-    char* _password;
-    char* _topic;
+    const char* _username;
+    const char* _password;
+    const char* _topic;
     unsigned int _messagesize;
     WiFiClient _wificlient;
     WiFiClientSecure _wificlientsecure;
