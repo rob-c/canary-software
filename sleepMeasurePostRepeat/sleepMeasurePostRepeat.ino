@@ -49,6 +49,11 @@
 #include "ADS1x15Sensor.h"
 #endif //ADS1015 or ADS1115
 
+//ESPx ADC
+#ifdef ESPxADC
+#include "ESPxADCSensor.h"
+#endif //ESPx ADC
+
 //******************************************
 //wifi and MQTT setup
 #if POST or VERBOSE
@@ -102,46 +107,107 @@ void setup() {
   //------------------------------------------
   //add sensors to the vector
 
+  //------------------------------------------
   //SHT35A
 #ifdef SHT35A
   SHTxxSensor* sht35a = new SHTxxSensor(SHTxxSensor::sht35a);
   sensors.emplace_back(sht35a);
 #endif //SHT35A
 
+  //------------------------------------------
   //SHT35B
 #ifdef SHT35B
   SHTxxSensor* sht35b = new SHTxxSensor(SHTxxSensor::sht35b);
   sensors.emplace_back(sht35b);
 #endif //SHT35B
 
+  //------------------------------------------
   //SHT85
 #ifdef SHT85
   SHTxxSensor* sht85 = new SHTxxSensor(SHTxxSensor::sht85);
   sensors.emplace_back(sht85);
 #endif //SHT85
 
+  //------------------------------------------
   //MAX31865
 #ifdef MAX31865
-#ifdef MAX31865RHSOURCE
-  MAX31865Sensor* max31865 = new MAX31865Sensor(MAX31865RNOM, MAX31865RREF, MAX31865CS, MAX31865RHSOURCE);
-#else
   MAX31865Sensor* max31865 = new MAX31865Sensor(MAX31865RNOM, MAX31865RREF, MAX31865CS);
-#endif //MAX31865RHSOURCE
   sensors.emplace_back(max31865);
+#ifdef MAX31865RHSOURCE
+  max31865->setRHSource(MAX31865RHSOURCE);
+#endif //MAX31865RHSOURCE
 #endif //MAX31865
 
+  //------------------------------------------
   //SPS30
 #ifdef SPS30
   SPS30Sensor* sps30 = new SPS30Sensor(SPS30AVERAGE, SPS30VERBOSE);
   sensors.emplace_back(sps30);
 #endif //SPS30
 
+  //------------------------------------------
   //ADS1015 or ADS1115
-#if defined(ADS1115) or defined(ADS1015)
-  ADS1x15Sensor* ads1x15 = new ADS1x15Sensor(ADS1x15VDD, ADS1x15VREF);
-  sensors.emplace_back(ads1x15);
+#if defined(ADS1015)
+  ADS1x15Sensor<Adafruit_ADS1015, 12>* ads1x15 = new ADS1x15Sensor<Adafruit_ADS1015, 12>("ADS1015", ADS1x15VDD, ADS1x15VREF, ADS1x15GAIN);
+#elif defined(ADS1115)
+  ADS1x15Sensor<Adafruit_ADS1115, 16>* ads1x15 = new ADS1x15Sensor<Adafruit_ADS1115, 16>("ADS1115", ADS1x15VDD, ADS1x15VREF, ADS1x15GAIN);
 #endif //ADS1015 or ADS1115
-    
+
+#if defined(ADS1115) or defined(ADS1015)
+  sensors.emplace_back(ads1x15);
+  
+#if ADS1x150ADC or ADS1x150NTC
+  ads1x15->setADCChannel(0, ADS1x150ADC, ADS1x150NTC, ADS1x150RDIV, ADS1x150T0, ADS1x150B, ADS1x150R0);
+#ifdef ADS1x150NTCTHRESHOLD
+  ads1x15->setNTCThreshold(0, ADS1x150NTCTHRESHOLD);
+#endif //ADS1x150NTCTHRESHOLD
+#endif //ADS1x150ADC or ADS1x150NTC
+
+#if ADS1x151ADC or ADS1x151NTC
+  ads1x15->setADCChannel(1, ADS1x151ADC, ADS1x151NTC, ADS1x151RDIV, ADS1x151T0, ADS1x151B, ADS1x151R0);
+#ifdef ADS1x151NTCTHRESHOLD
+  ads1x15->setNTCThreshold(1, ADS1x151NTCTHRESHOLD);
+#endif //ADS1x151NTCTHRESHOLD
+#endif //ADS1x151ADC or ADS1x151NTC
+
+#if ADS1x152ADC or ADS1x152NTC
+  ads1x15->setADCChannel(2, ADS1x152ADC, ADS1x152NTC, ADS1x152RDIV, ADS1x152T0, ADS1x152B, ADS1x152R0);
+#ifdef ADS1x152NTCTHRESHOLD
+  ads1x15->setNTCThreshold(2, ADS1x152NTCTHRESHOLD);
+#endif //ADS1x152NTCTHRESHOLD
+#endif //ADS1x152ADC or ADS1x152NTC
+
+#if ADS1x153ADC or ADS1x153NTC
+  ads1x15->setADCChannel(3, ADS1x153ADC, ADS1x153NTC, ADS1x153RDIV, ADS1x153T0, ADS1x153B, ADS1x153R0);
+#ifdef ADS1x153NTCTHRESHOLD
+  ads1x15->setNTCThreshold(3, ADS1x153NTCTHRESHOLD);
+#endif //ADS1x153NTCTHRESHOLD
+#endif //ADS1x153ADC or ADS1x153NTC
+
+#endif //ADS1015 or ADS1115
+  
+  //------------------------------------------
+  //ESP8266 or ESP32 ADC
+#ifdef ESPxADC
+
+#ifdef ESP8266
+  ESPxADCSensor<10, 1>* espxadc = new ESPxADCSensor<10, 1>("ESP8266ADC", ESPxADCVDD, ESPxADCVREF, ESPxADCNREADINGS);
+#else //ESP32
+  ESPxADCSensor<12, 1>* espxadc = new ESPxADCSensor<12, 1>("ESP32ADC", ESPxADCVDD, ESPxADCVREF, ESPxADCNREADINGS);
+  espxadc->setAttenuation(ESPxADCATTENUATION);
+#endif //ESP8266 or ESP32
+
+  sensors.emplace_back(espxadc);
+
+#if ESPxADC0ADC or ESPxADC0NTC
+  espxadc->setADCChannel(0, ESPxADC0PIN, ESPxADC0ADC, ESPxADC0NTC, ESPxADC0RDIV, ESPxADC0T0, ESPxADC0B, ESPxADC0R0);
+#ifdef ESPxADC0NTCTHRESHOLD
+  espxadc->setNTCThreshold(0, ESPxADC0NTCTHRESHOLD);
+#endif //ESPxADC0NTCTHRESHOLD
+#endif //ESPxADC0ADC or ESPxADC0NTC
+
+#endif //ESPxADC
+  
   //------------------------------------------
   //initialize sensors
   for (auto&& sensor : sensors) {

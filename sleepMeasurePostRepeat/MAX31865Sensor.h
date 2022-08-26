@@ -15,12 +15,13 @@ class MAX31865Sensor: public virtual TRHSensor {
 
   //------------------------------------------
   public:
-    MAX31865Sensor(float rnom, float rref, uint8_t cs, TRHSensor* rhsource = NULL);
+    MAX31865Sensor(float rnom, float rref, uint8_t cs);
     int init() override;
     void readData() override;
     String getSensorString(void) override;
     String getMeasurementsString(void) override;
     void getJSONDoc(JsonDocument &doc) override;
+    void setRHSource(TRHSensor* rhsource);
 
   //------------------------------------------
   private:
