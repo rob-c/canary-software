@@ -26,6 +26,7 @@ class MAX31865Sensor: public virtual TRHSensor {
   //------------------------------------------
   private:
     Adafruit_MAX31865 _max31865;
+    uint8_t _fault;
     float _rnom;
     float _rref;
     uint8_t _cs;

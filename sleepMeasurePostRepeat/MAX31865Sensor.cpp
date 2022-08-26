@@ -36,26 +36,28 @@ void MAX31865Sensor::readData() {
 
   //------------------------------------------
   //check and print any faults
-  uint8_t fault = _max31865.readFault();
-  if (fault) {
+  _fault = _max31865.readFault();
+  if (_fault) {
+    _temp = std::numeric_limits<float>::quiet_NaN();
     Serial.print("MAX31865 fault 0x");
-    Serial.println(fault, HEX);
-    if (fault & MAX31865_FAULT_HIGHTHRESH) {
+    Serial.print(_fault, HEX);
+    Serial.print(": ");
+    if (_fault & MAX31865_FAULT_HIGHTHRESH) {
       Serial.println("RTD high threshold"); 
     }
-    if (fault & MAX31865_FAULT_LOWTHRESH) {
+    if (_fault & MAX31865_FAULT_LOWTHRESH) {
       Serial.println("RTD low threshold"); 
     }
-    if (fault & MAX31865_FAULT_REFINLOW) {
+    if (_fault & MAX31865_FAULT_REFINLOW) {
       Serial.println("REFIN- > 0.85 x bias"); 
     }
-    if (fault & MAX31865_FAULT_REFINHIGH) {
+    if (_fault & MAX31865_FAULT_REFINHIGH) {
       Serial.println("REFIN- < 0.85 x bias - FORCE- open"); 
     }
-    if (fault & MAX31865_FAULT_RTDINLOW) {
+    if (_fault & MAX31865_FAULT_RTDINLOW) {
       Serial.println("RTDIN- < 0.85 x bias - FORCE- open"); 
     }
-    if (fault & MAX31865_FAULT_OVUV) {
+    if (_fault & MAX31865_FAULT_OVUV) {
       Serial.println("under/over voltage"); 
     }
     _max31865.clearFault();
