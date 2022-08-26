@@ -12,7 +12,7 @@
 
 //******************************************
 //definitions
-#define VERSION "v. 1.0.1"
+#define VERSION "v. 1.3.0"
 
 //******************************************
 //libraries
@@ -43,6 +43,11 @@
 #ifdef MAX31865
 #include "MAX31865Sensor.h"
 #endif //MAX31865
+
+//BMP3xx
+#ifdef BMP3XX
+#include "BMP3xxSensor.h"
+#endif //BMP3xx
 
 //SPS30
 #ifdef SPS30
@@ -149,6 +154,13 @@ void setup() {
 #endif //MAX31865
 
   //------------------------------------------
+  //BMP3xx
+#ifdef BMP3XX
+  BMP3xxSensor* bmp3xx = new BMP3xxSensor(BMP3XXTYPE, BMP3XXADDRESS);
+  sensors.emplace_back(bmp3xx);
+#endif //BMP3xx
+    
+  //------------------------------------------
   //SPS30
 #ifdef SPS30
   SPS30Sensor* sps30 = new SPS30Sensor(SPS30AVERAGE, SPS30VERBOSE);
@@ -217,7 +229,7 @@ void setup() {
 #endif //ESPxADC0ADC or ESPxADC0NTC
 
 #endif //ESPxADC
-  
+
   //------------------------------------------
   //initialize sensors
   for (auto&& sensor : sensors) {

@@ -1,6 +1,6 @@
 /*
  * Ethernet handling class.
- * This inheriths from the network handler class.
+ * This inherits from the network handler class.
  */
 
 #ifndef ETHERNETHANDLER
