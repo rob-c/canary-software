@@ -23,9 +23,14 @@
 #include "AsyncDelay.h"
 #include "ArduinoJson.h"
 
-//wifi and MQTT
+//network and MQTT
 #if POST or VERBOSE
+#include "NetworkHandler.h"
+#ifdef ETHERNET //ethernet
+#include "EthernetHandler.h"
+#else //wifi
 #include "WiFiHandler.h"
+#endif //ETHERNET
 #include "MQTTHandler.h"
 #endif //POST or VERBOSE
 
@@ -55,10 +60,15 @@
 #endif //ESPx ADC
 
 //******************************************
-//wifi and MQTT setup
+//network and MQTT setup
 #if POST or VERBOSE
-WiFiHandler wifihandler(WIFISSID,
-			WIFIPASSWORD);
+#ifdef ETHERNET //ethernet
+EthernetHandler networkhandler;
+#else //wifi
+WiFiHandler networkhandler(WIFISSID,
+			   WIFIPASSWORD);
+#endif //ETHERNET
+
 PubSubClient mqttclient;
 MQTTHandler mqtthandler(&mqttclient,
 			MQTTSERVER,
@@ -99,9 +109,9 @@ void setup() {
   Serial.println();
 
   //------------------------------------------
-  //wifi connection
+  //network connection
 #if POST
-  wifihandler.connect(VERBOSE);
+  networkhandler.connect(VERBOSE);
 #endif //POST
 
   //------------------------------------------
@@ -318,14 +328,15 @@ void readPrintPost() {
       masterdoc.add(sensordoc);
     }
 #if POST
-    wifihandler.connect(VERBOSE);
-#endif //POST
+    mqtthandler.post(masterdoc, networkhandler.connect(VERBOSE), VERBOSE);
+#else
     mqtthandler.post(masterdoc, POST, VERBOSE);
+#endif //POST
 
     //------------------------------------------
     //disconnect before leaving
 #if not CAFFEINE
-    wifihandler.disconnect();
+    networkhandler.disconnect();
 #endif //not CAFFEINE
 #endif //POST or VERBOSE
 
@@ -347,7 +358,7 @@ void addMetaData(JsonDocument &doc) {
 #ifdef NAME
   doc["name"] = NAME;
 #elif defined(MACASNAME)
-  doc["name"] = wifihandler.getMACAddress();
+  doc["name"] = networkhandler.getMACAddress();
 #endif //NAME or MACASNAME
   return;
 }

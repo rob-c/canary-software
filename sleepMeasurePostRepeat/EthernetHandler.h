@@ -1,30 +1,31 @@
 /*
- * Wifi handling class.
+ * Ethernet handling class.
  * This inheriths from the network handler class.
  */
 
-#ifndef WIFIHANDLER
-#define WIFIHANDLER
+#ifndef ETHERNETHANDLER
+#define ETHERNETHANDLER
 
 //******************************************
 //libraries
 #include "NetworkHandler.h"
- 
+#include "ETH.h"
+#include "config.h"
+
 //******************************************
-class WiFiHandler: public virtual NetworkHandler {
+class EthernetHandler: public virtual NetworkHandler {
 
   //------------------------------------------
   public:
-    WiFiHandler(char* ssid,
-		char* password);
+    EthernetHandler();
     int status(bool verbose=false) override;
     bool connect(bool verbose=false) override;
-    String getMACAddress() override {return WiFi.macAddress();}
-    void disconnect() override;
+    String getMACAddress() override {return ETH.macAddress();}
+    void disconnect() override {return;}
+    static void handleEvent(WiFiEvent_t event);
 
   //------------------------------------------
   private:
-    const char* _ssid;
-    const char* _password;
+    static bool _connected;
 };
-#endif //WIFIHANDLER
+#endif //ETHERNETHANDLER
