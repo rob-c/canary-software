@@ -1,6 +1,6 @@
 /*
  * SHT sensor class.
- * This inheriths from the generic TRH sensor class.
+ * This inherits from the generic TRH sensor class.
  */
 
 #ifndef SHTXXSENSOR

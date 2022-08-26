@@ -1,6 +1,6 @@
 /*
  * SPS30 sensor class.
- * This inheriths from the generic sensor class.
+ * This inherits from the generic sensor class.
  */
 
 #ifndef SPS30SENSOR

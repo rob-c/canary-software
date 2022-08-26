@@ -1,7 +1,7 @@
 /*
  * ADS1x15 sensor template class.
  * This template class supports Adafruit_ADS1015 and Adafruit_ADS1115.
- * This inheriths from the generic sensor class.
+ * This inherits from the generic sensor class.
  */
  
 #ifndef ADS1X15SENSOR

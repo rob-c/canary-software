@@ -1,7 +1,7 @@
 /*
  * ESP8266 and ESP32 ADC template class.
  * This template class supports ESP8266 and ESP32.
- * This inheriths from the generic sensor class.
+ * This inherits from the generic sensor class.
  */
  
 #ifndef ESPXADCSENSOR

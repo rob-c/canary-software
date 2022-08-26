@@ -8,17 +8,17 @@
 //******************************************
 //setup
 #define CAFFEINE true //do not go to sleep; use if not battery operated
-#define SLEEPTIME 10 //sleep interval [s]
+#define SLEEPTIME 5 //sleep interval [s]
 #define INTEGRATIONTIME 1 //measurements integration time interval [s]
-#define PRINTSERIAL false //print measurements to serial output
-#define POST true //connect and post measurements to MQTT server
-#define VERBOSE true //print connection status and posting details
+#define PRINTSERIAL true //print measurements to serial output
+#define POST false //connect and post measurements to MQTT server
+#define VERBOSE false //print connection status and posting details
 #define TLS false //use TLS encryption; does not work with ESP8266
 //#define ESP8266 //use an ESP8266 microcontroller instead of an ESP32
 
 //******************************************
 //network
-#define ETHERNET //use ethernet connection instead of wifi
+//#define ETHERNET //use ethernet connection instead of wifi
 
 //ethernet settings
 //wESP32 revision 7+ uses RTL8201
@@ -52,7 +52,7 @@
 //******************************************
 //SHT temperature and humidity sensors
 //#define SHT35A //enable SHT35 A (0x44 address)
-//#define SHT35B //enable SHT35 B (0x45 address)
+#define SHT35B //enable SHT35 B (0x45 address)
 //#define SHT85 //enable SHT85 (0x44 address)
 
 //******************************************
@@ -66,6 +66,12 @@
 #define MAX31865CS 33 //CS pin for ESP32
 #endif
 #define MAX31865RHSOURCE sht35b //RH measurement source for dew point calculation; use instance name from sleepMeasurePostRepeat.ino
+
+//******************************************
+//BMP3xx temperature and pressure sensors
+#define BMP3XX //enable BMP3xx
+#define BMP3XXTYPE "BMP390" //BMP3xx type
+#define BMP3XXADDRESS 0x77 //BMP3xx address: 0x77 (default) or 0x76
 
 //******************************************
 //SPS30 dust particle counter
