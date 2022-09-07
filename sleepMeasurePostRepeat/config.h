@@ -12,7 +12,7 @@
 #define INTEGRATIONTIME 1 //measurements integration time interval [s]
 #define PRINTSERIAL true //print measurements to serial output
 #define POST false //connect and post measurements to MQTT server
-#define VERBOSE false //print connection status and posting details
+#define VERBOSE true //print connection status and posting details
 #define TLS false //use TLS encryption; does not work with ESP8266
 //#define ESP8266 //use an ESP8266 microcontroller instead of an ESP32
 
@@ -68,14 +68,19 @@
 #define MAX31865RHSOURCE sht35b //RH measurement source for dew point calculation; use instance name from sleepMeasurePostRepeat.ino
 
 //******************************************
+//BME280 temperature, humidity and pressure sensor
+#define BME280 //enable BME280
+#define BME280ADDRESS 0x77 //BME280 address: 0x77 (default) or 0x76
+
+//******************************************
 //BMP3xx temperature and pressure sensors
-#define BMP3XX //enable BMP3xx
+//#define BMP3XX //enable BMP3xx
 #define BMP3XXTYPE "BMP390" //BMP3xx type
 #define BMP3XXADDRESS 0x77 //BMP3xx address: 0x77 (default) or 0x76
 
 //******************************************
 //SPS30 dust particle counter
-#define SPS30 //enable SPS30
+//#define SPS30 //enable SPS30
 #define SPS30AVERAGE true //average over multiple SPS30 measurements (one per second)
 #define SPS30VERBOSE false //print SPS30 information
 

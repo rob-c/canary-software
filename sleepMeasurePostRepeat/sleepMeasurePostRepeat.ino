@@ -44,6 +44,11 @@
 #include "MAX31865Sensor.h"
 #endif //MAX31865
 
+//BME280
+#ifdef BME280
+#include "BME280Sensor.h"
+#endif //BME280
+
 //BMP3xx
 #ifdef BMP3XX
 #include "BMP3xxSensor.h"
@@ -152,6 +157,13 @@ void setup() {
   max31865->setRHSource(MAX31865RHSOURCE);
 #endif //MAX31865RHSOURCE
 #endif //MAX31865
+
+  //------------------------------------------
+  //BME280
+#ifdef BME280
+  BME280Sensor* bme280 = new BME280Sensor(BME280ADDRESS);
+  sensors.emplace_back(bme280);
+#endif //BME280
 
   //------------------------------------------
   //BMP3xx

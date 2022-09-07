@@ -38,6 +38,7 @@ void BMP3xxSensor::readData() {
   _temp = _bmp.temperature; //C
   _pressure = _bmp.pressure; //Pa
   _altitude = _bmp.readAltitude(SEALEVELPRESSUREHPA); //m
+  return;
 }
 
 //******************************************
