@@ -114,9 +114,16 @@ void setup() {
   //serial begin
   Serial.begin(115200);
   while (!Serial) {}
+  delay(500);//ms
   Serial.println("\nsleep, measure, post, repeat");
   Serial.println(VERSION);
   Serial.println();
+
+  //------------------------------------------
+  //set I2C GPIO pins
+#if defined(I2CSDA) and defined(I2CSCL)
+  Wire.begin(I2CSDA, I2CSCL); //SDA, SCL
+#endif //I2CSDA and I2CSCL
 
   //------------------------------------------
   //network connection

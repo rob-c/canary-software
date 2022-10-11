@@ -31,13 +31,16 @@ int BMP3xxSensor::init() {
 //******************************************
 //read data from the sensor
 void BMP3xxSensor::readData() {
-  if (not _bmp.performReading()) {
-    Serial.println("failed to read BMP3xx");
-    return;
+  if (_bmp.performReading()) {
+    _temp = _bmp.temperature; //C
+    _pressure = _bmp.pressure; //Pa
+    _altitude = _bmp.readAltitude(SEALEVELPRESSUREHPA); //m
+  } else {
+    //Serial.println("failed to read BMP3xx");
+    _temp = std::numeric_limits<float>::quiet_NaN();
+    _pressure = std::numeric_limits<float>::quiet_NaN();
+    _altitude = std::numeric_limits<float>::quiet_NaN();    
   }
-  _temp = _bmp.temperature; //C
-  _pressure = _bmp.pressure; //Pa
-  _altitude = _bmp.readAltitude(SEALEVELPRESSUREHPA); //m
   return;
 }
 

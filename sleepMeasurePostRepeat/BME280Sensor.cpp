@@ -30,11 +30,26 @@ int BME280Sensor::init() {
 //******************************************
 //read data from the sensor
 void BME280Sensor::readData() {
-  _temp = _bme.readTemperature(); //C
-  _rh = _bme.readHumidity(); //%
-  _pressure = _bme.readPressure(); //Pa
-  _altitude = _bme.readAltitude(SEALEVELPRESSUREHPA); //m
+
+  //check the communication with the sensor
+  Wire.beginTransmission(byte(_address));
+
+  //read data
+  if (Wire.endTransmission()){
+    //Serial.println("failed to read BME280");
+    _temp = std::numeric_limits<float>::quiet_NaN();
+    _rh = std::numeric_limits<float>::quiet_NaN();
+    _pressure = std::numeric_limits<float>::quiet_NaN();
+    _altitude = std::numeric_limits<float>::quiet_NaN();
+  } else {
+    _temp = _bme.readTemperature(); //C
+    _rh = _bme.readHumidity(); //%
+    _pressure = _bme.readPressure(); //Pa
+    _altitude = _bme.readAltitude(SEALEVELPRESSUREHPA); //m
+  }
+  
   computeDewPoint();
+  
   return;
 }
 
