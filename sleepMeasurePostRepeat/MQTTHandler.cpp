@@ -123,7 +123,14 @@ bool MQTTHandler::connect(bool verbose) {
     Serial.println(_server);
     Serial.println();
   }
-  
+
+  //------------------------------------------
+  //reboot
+#if MQTTFAILREBOOT
+  Serial.println("\nMQTT connection failure\nwill now reboot\n\n");
+  ESP.restart();
+#endif
+
   return false;
 }
 
@@ -133,7 +140,7 @@ bool MQTTHandler::connect(bool verbose) {
 int MQTTHandler::status(bool verbose) {
 
   int status = _mqttclient->state();
-    
+
   if (verbose) {
     Serial.print("status: ");
     switch (status) {

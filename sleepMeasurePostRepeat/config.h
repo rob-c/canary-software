@@ -50,6 +50,7 @@
 //#define NAME "name" //name of the measuring device (optional)
 //#define MACASNAME //use the MAC address as device name (optional)
 #define MQTTTIME 10 //MQTT broker check-in time interval [s]
+#define MQTTFAILREBOOT true //reboot the MCU in case of repeated MQTT connection failures
 
 //******************************************
 //SHT temperature and humidity sensors

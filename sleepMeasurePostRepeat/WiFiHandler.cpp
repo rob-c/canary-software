@@ -63,9 +63,18 @@ bool WiFiHandler::connect(bool verbose) {
   }
 
   //------------------------------------------
-  //wifi begin
+  //wifi disconnect
   //https://github.com/esp8266/Arduino/issues/2702
   WiFi.disconnect();
+
+  //wifi mode
+#ifdef ESP8266
+  WiFi.mode(WIFI_STA); //ESP8266
+#else //ESP32
+  WiFi.mode(WIFI_MODE_STA); //ESP32
+#endif //ESP8266
+
+  //wifi begin
   WiFi.begin(_ssid, _password);
 
   if (verbose) {
