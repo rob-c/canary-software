@@ -1,3 +1,4 @@
+#ifndef ESP8266
 #include "EthernetHandler.h"
 
 //******************************************
@@ -148,3 +149,5 @@ void EthernetHandler::handleEvent(WiFiEvent_t event) {
 
   return;
 }
+
+#endif //not ESP8266

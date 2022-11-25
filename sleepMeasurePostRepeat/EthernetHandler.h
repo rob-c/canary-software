@@ -3,6 +3,7 @@
  * This inherits from the network handler class.
  */
 
+#ifndef ESP8266
 #ifndef ETHERNETHANDLER
 #define ETHERNETHANDLER
 
@@ -28,4 +29,6 @@ class EthernetHandler: public virtual NetworkHandler {
   private:
     static bool _connected;
 };
+
 #endif //ETHERNETHANDLER
+#endif //not ESP8266
