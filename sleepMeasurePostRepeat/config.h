@@ -12,9 +12,11 @@
 #define INTEGRATIONTIME 1 //measurements integration time interval [s]
 #define PRINTSERIAL true //print measurements to serial output
 #define POST false //connect and post measurements to MQTT server
-#define VERBOSE true //print connection status and posting details
+#define VERBOSE false //print connection status and posting details
 #define TLS false //use TLS encryption; does not work with ESP8266
 //#define ESP8266 //use an ESP8266 microcontroller instead of an ESP32
+//#define I2CSDA 33 //I2C SDA GPIO pin
+//#define I2CSCL 5 //I2C SCL GPIO pin
 
 //******************************************
 //network
@@ -69,7 +71,7 @@
 
 //******************************************
 //BME280 temperature, humidity and pressure sensor
-#define BME280 //enable BME280
+//#define BME280 //enable BME280
 #define BME280ADDRESS 0x77 //BME280 address: 0x77 (default) or 0x76
 
 //******************************************
@@ -80,7 +82,7 @@
 
 //******************************************
 //SPS30 dust particle counter
-//#define SPS30 //enable SPS30
+#define SPS30 //enable SPS30
 #define SPS30AVERAGE true //average over multiple SPS30 measurements (one per second)
 #define SPS30VERBOSE false //print SPS30 information
 

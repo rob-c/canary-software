@@ -34,6 +34,10 @@ int SPS30Sensor::init() {
     delay(500); //ms
   }
 
+  if (not _sps30available){
+      Serial.println("SPS30: begin error");
+  }
+
   //------------------------------------------
   //SPS30 serial number
   if (_sps30available and _verbose) {
