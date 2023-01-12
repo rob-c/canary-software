@@ -12,7 +12,7 @@
 
 //******************************************
 //definitions
-#define VERSION "v. 1.3.0"
+#define VERSION "v. 1.4.0"
 
 //******************************************
 //libraries
@@ -98,7 +98,7 @@ std::vector<std::unique_ptr<Sensor>> sensors;
 //******************************************
 //JSON documents
 StaticJsonDocument<MQTTMESSAGESIZE> masterdoc;
-StaticJsonDocument<160> sensordoc;
+StaticJsonDocument<200> sensordoc;
 
 //******************************************
 //loop time intervals
