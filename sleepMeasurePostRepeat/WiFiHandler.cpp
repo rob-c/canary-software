@@ -123,7 +123,7 @@ bool WiFiHandler::eap_connect(bool verbose) {
   bool err = esp_wifi_sta_wpa2_ent_enable(&wpa2_config);
 #endif
 
-  if( !err ){
+  if( err ){
     Serial.println("Failed to set WPA2 Enterprise config");
     return false;
   }
