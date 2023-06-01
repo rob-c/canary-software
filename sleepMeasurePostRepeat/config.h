@@ -11,12 +11,12 @@
 #define SLEEPTIME 5 //sleep interval [s]
 #define INTEGRATIONTIME 1 //measurements integration time interval [s]
 #define PRINTSERIAL true //print measurements to serial output
-#define POST false //connect and post measurements to MQTT server
+#define POST true //connect and post measurements to MQTT server
 #define VERBOSE false //print connection status and posting details
 #define TLS false //use TLS encryption; does not work with ESP8266
 //#define ESP8266 //use an ESP8266 microcontroller instead of an ESP32
-//#define I2CSDA 33 //I2C SDA GPIO pin
-//#define I2CSCL 5 //I2C SCL GPIO pin
+#define I2CSDA 23 //I2C SDA GPIO pin
+#define I2CSCL 22 //I2C SCL GPIO pin
 
 //******************************************
 //network
@@ -32,28 +32,28 @@
 #define ETHERNETPHYTYPE ETH_PHY_RTL8201
 
 //wifi settings
-#define WIFISSID "ssid" //wifi SSID
-#define WIFIUSER "username" //wifi username
-#define WIFIPASSWORD "password" //wifi password
+#define WIFISSID "eduroam" //wifi SSID
+//#define WIFIUSER "username" //wifi username
+//#define WIFIPASSWORD "password" //wifi password
 #define ENT_WIFI_V1 false //fall back to using V1 of the wifi stack (esp32 <= v1.0.6 board from espressif)
 #define WIFIENTENABLE true //use enetrprise login details over username/password
-#define WIFIENTID "@site.tld" //wifi enterprise ID
-#define WIFIENTUSER "entuser@site.tld" //wifi enterprise username
-#define WIFIENDPASS "entpassword" //wifi enterprise username
+#define WIFIENTID "@institute.ac.uk" //wifi enterprise ID
+#define WIFIENTUSER "some_user@institute.ac.uk" //wifi enterprise username
+#define WIFIENDPASS "wifi_password" //wifi enterprise username
 
 //******************************************
 //MQTT
 #define MQTTMESSAGESIZE 1024 //maximum message length [byte]
-#define MQTTSERVER "mqqtserver" //MQTT server address
+#define MQTTSERVER "some.server.ac.uk" //MQTT server address
 #define MQTTPORT 1883 //MQTT server port
 #define MQTTTLSPORT 8883 //MQTT with TLS server port
-#define MQTTUSERNAME "username" //MQTT username
-#define MQTTPASSWORD "password" //MQTT password
-#define MQTTTOPIC "topic" //MQTT topic
-//#define INSTITUTE "institute" //institute of the measuring device (optional)
-//#define ROOM "room" //room of the measuring device (optional)
-//#define LOCATION "location" //location of the measuring device (optional)
-//#define NAME "name" //name of the measuring device (optional)
+#define MQTTUSERNAME "mqtt_user" //MQTT username
+#define MQTTPASSWORD "mqtt_pass" //MQTT password
+#define MQTTTOPIC "mqtt_topic" //MQTT topic
+#define INSTITUTE "UoE" //institute of the measuring device (optional)
+#define ROOM "52xx" //room of the measuring device (optional)
+#define LOCATION "JCMB" //location of the measuring device (optional)
+#define NAME "canary1" //name of the measuring device (optional)
 //#define MACASNAME //use the MAC address as device name (optional)
 #define MQTTTIME 10 //MQTT broker check-in time interval [s]
 #define MQTTFAILREBOOT true //reboot the MCU in case of repeated MQTT connection failures
@@ -62,11 +62,11 @@
 //SHT temperature and humidity sensors
 //#define SHT35A //enable SHT35 A (0x44 address)
 #define SHT35B //enable SHT35 B (0x45 address)
-//#define SHT85 //enable SHT85 (0x44 address)
+//#define SHT35 //enable SHT85 (0x44 address)
 
 //******************************************
 //MAX31865 RTD sensor
-//#define MAX31865 //enable MAX31865
+#define MAX31865 //enable MAX31865
 #define MAX31865RNOM 1000 //sensor nominal resistance at 0 C (100 Ohm or 1000 Ohm) [Ohm]
 #define MAX31865RREF 4020 //reference resistor [Ohm]
 #ifdef ESP8266 //ESP8266
@@ -89,7 +89,7 @@
 
 //******************************************
 //SPS30 dust particle counter
-#define SPS30 //enable SPS30
+#define SPS30 true //enable SPS30
 #define SPS30AVERAGE true //average over multiple SPS30 measurements (one per second)
 #define SPS30VERBOSE false //print SPS30 information
 

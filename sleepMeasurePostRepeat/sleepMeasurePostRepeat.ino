@@ -72,21 +72,15 @@
 //******************************************
 //network and MQTT setup
 #if POST or VERBOSE
-<<<<<<< HEAD
 #ifdef ETHERNET //ethernet
 EthernetHandler networkhandler;
 #else //wifi
-WiFiHandler networkhandler(WIFISSID,
-			   WIFIPASSWORD);
-#endif //ETHERNET
-
-=======
 #ifndef WIFIENTENABLE
-  WiFiHandler wifihandler(WIFISSID, WIFIPASSWORD);
+  WiFiHandler networkhandler(WIFISSID, WIFIPASSWORD);
 #else
-  WiFiHandler wifihandler(WIFISSID, WIFIENTID, WIFIENTUSER, WIFIENDPASS);
+  WiFiHandler networkhandler(WIFISSID, WIFIENTID, WIFIENTUSER, WIFIENDPASS);
 #endif
->>>>>>> 78bc3dd (Adding support for eduroam)
+#endif
 PubSubClient mqttclient;
 MQTTHandler mqtthandler(&mqttclient,
 			MQTTSERVER,

@@ -3,7 +3,7 @@
 //******************************************
 //MAX31865 constructor
 MAX31865Sensor::MAX31865Sensor(float rnom, float rref, uint8_t cs):
-  _max31865(Adafruit_MAX31865(cs))
+  _max31865(Adafruit_MAX31865(cs,18,19,5))
   {
   _name = "MAX31865";
   _rnom = rnom;

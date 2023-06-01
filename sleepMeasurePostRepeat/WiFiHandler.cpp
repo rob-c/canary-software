@@ -104,13 +104,21 @@ bool WiFiHandler::eap_connect(bool verbose) {
     return false;
   }
   Serial.print("user >> ");
-  Serial.println(_eap_username);
+  if (verbose) {
+    Serial.println(_eap_username);
+  } else {
+    Serial.println("user-xxx-yyy-zzz");
+  }
   if( esp_wifi_sta_wpa2_ent_set_username((uint8_t *)_eap_username, strlen(_eap_username)) ){
     Serial.println("Failed to set WPA2 Username");
     return false;
   }
   Serial.print("pass >> ");
-  Serial.println(_eap_password);
+  if (verbose) {    
+    Serial.println(_eap_password);
+  } else {
+    Serial.print("pass-xxx-yyy-zzz");
+  }
   if( esp_wifi_sta_wpa2_ent_set_password((uint8_t *)_eap_password, strlen(_eap_password)) ){
     Serial.println("Failed to set WPA2 Password");
     return false;
